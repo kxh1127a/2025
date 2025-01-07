@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<style>
+* { margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; }
+[class^="box"] { position: absolute; }
+</style>
+
+<body>
+<div id="printArea" class="printArea"></div>
+<script>
+	class Box {
+        constructor(id) {
+            this.id = id;
+        }
+        printBox() {
+            let htmlString = `<div class="${this.id}"></div>`;
+            document.getElementById('printArea').innerHTML += htmlString;
+            document.querySelector(`.${this.id}`).style.top = Math.floor(Math.random()* (90)) + '%';
+            document.querySelector(`.${this.id}`).style.left = Math.floor(Math.random()* (90)) + '%';
+            document.querySelector(`.${this.id}`).style.width = Math.floor(Math.random()*(50)) + 'px';
+            document.querySelector(`.${this.id}`).style.height = Math.floor(Math.random()*(50)) + 'px';
+            let colorR = Math.floor(Math.random()*(255));
+            let colorG = Math.floor(Math.random()*(255));
+            let colorB = Math.floor(Math.random()*(255));
+            let randomOpacity = Math.random();
+            document.querySelector(`.${this.id}`).style.backgroundColor = `rgba(${colorR}, ${colorG}, ${colorB}, ${randomOpacity})`;
+        }
+    }
+
+    let boxList = [];
+    for(let i=0; i<100; i++) {
+        boxList.push(new Box(`box${i}`));
+        boxList[i].printBox();
+    }
+</script>
+</body>
+</html>

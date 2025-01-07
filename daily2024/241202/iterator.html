@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<script>
+class ABC {
+	constructor(id) {
+    	this.id = id;
+    	this.inputNumber = 0;
+        this.inputNumberLength = 0;
+    }
+    getNumber() {
+    	this.inputNumber = String(prompt('숫자?'));
+        //document.write(this.inputNumber);
+        this.inputNumberLength = this.inputNumber.length;
+        //document.write(this.inputNumberLength)
+    }
+    iterator() {
+    	let iterator = this.inputNumber[Symbol.iterator]();
+		let iteratorElement = iterator.next();
+        //console.log(iteratorElement.done);
+        let index = 0;
+        let tempArr = [];
+        let totalValue = 0;
+        while(!iteratorElement.done) {
+            document.write(`(${iteratorElement.value} * 10<sup>${this.inputNumberLength - index - 1}</sup>)`);
+            tempArr.push( Number(iteratorElement.value)* 10**(this.inputNumberLength - index - 1))
+            console.log(tempArr)
+            if(this.inputNumberLength - index - 1 != 0) {
+                document.write(' + ') 
+            }
+            iteratorElement = iterator.next();
+            index += 1
+        }
+        document.write('<br>' + '= ');
+        for(let i=0; i<tempArr.length; i++) {
+            document.write(`${tempArr[i]}`);
+            totalValue += tempArr[i];
+            if(Number(tempArr.length-1) != i ) {
+                document.write(' + ');
+            }
+        }
+        document.write(`<br> = ${totalValue}`);
+    }
+    parseNumber() {
+    	//document.write(this.inputNumberLength);
+    	for(let i=0; i<this.inputNumberLength; i++ ){
+        	document.write(`${this.inputNumber[i]} * 10**${this.inputNumberLength - i - 1} <br>  `)
+        }
+    }
+    run() {
+    	this.getNumber();
+        this.iterator();
+        // this.parseNumber();
+    }
+}
+
+const abc = new ABC('abc');
+abc.run();
+
+</script>
+
+</body>
+</html>

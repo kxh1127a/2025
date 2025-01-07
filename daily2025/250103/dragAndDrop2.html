@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .numbers {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+            line-height: 40px;
+            text-align: center;
+            margin: 5px;
+        }
+        .inputs {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+            line-height: 40px;
+            text-align: center;
+            margin: 5px;
+        }
+        span {
+            width: 20px;
+            height: 40px;
+            line-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="numbersBox">
+        <div class="numbers" draggable="true">0</div>
+        <div class="numbers" draggable="true">1</div>
+        <div class="numbers" draggable="true">2</div>
+        <div class="numbers" draggable="true">3</div>
+        <div class="numbers" draggable="true">4</div>
+        <div class="numbers" draggable="true">5</div>
+        <div class="numbers" draggable="true">6</div>
+        <div class="numbers" draggable="true">7</div>
+        <div class="numbers" draggable="true">8</div>
+        <div class="numbers" draggable="true">9</div>
+    </div>
+    <div>
+        <div class="inputs" id="container"></div><span>+</span>
+        <div class="inputs" id="container2"></div><span>=</span>
+        
+        <button id="btn">계산하기</button>
+        <div id="outputArea"></div>
+    </div>
+
+    <script>
+        const numbers = document.querySelectorAll('.numbers');
+        console.log(numbers)
+        numbers.forEach(v => {
+            v.addEventListener('dragstart', e=>{
+                e.dataTransfer.setData('data', v.innerHTML);
+            })
+        })
+
+        const container = document.getElementById('container');
+        const container2 = document.getElementById('container2');
+        let value1 = 0;
+        let value2 = 0;
+
+        addEventListener('dragover', e=>{
+            e.preventDefault();
+        })
+        addEventListener('drop', e=>{
+            e.preventDefault();
+            switch(e.target.id) {
+                case "container":
+                    value1 = Number(e.dataTransfer.getData('data'));
+                    container.innerHTML = value1;       
+                    break;
+                case "container2":
+                    value2 = Number(e.dataTransfer.getData('data'));
+                    container2.innerHTML = value2;
+                    break;
+            }
+        })
+        addEventListener('click', e=>{
+            switch(e.target.id) {
+                case "btn":
+                    let totalValue = value1 + value2;
+                    document.getElementById('outputArea').innerHTML = totalValue;
+                    break;
+            }
+        })
+
+       
+
+    </script>
+</body>
+</html>

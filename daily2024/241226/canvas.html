@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="displayArea"></div>
+    <script>
+        class Canvas {
+            constructor(id) {
+                this.canvas = null;
+                this.pen = null;
+                this.canvasHeight = 500;
+                this.canvasWidth = 500;
+                this.scaleFactor = 25;
+                this.defaultArr = [];
+                this.isXon = false;
+                this.isYon = false;
+                this.isXYon = false;
+            }
+            init() {
+                const htmlString = `
+                    <section>
+                        <p><button id="up">▲</button></p>
+                        <div class="center"><button id="left">◀</button><button id="center">◎</button><button id="right">▶</button></div>
+                        <p><button id="down">▼</button></p>
+                    </section>
+                    <canvas id="canvas" class="canvas" width="500" height="500"></canvas>
+                    <div>
+                        <button id="xAxis">x축대칭</button>
+                        <button id="yAxis">y축대칭</button>
+                        <button id="xyAxis">회전대칭</button>
+                    </div>
+                    <div class="option">
+                        <button id="bigger">확대</button>
+                        <button id="smaller">축소</button>
+                        <button id="reset">리셋</button>
+                    </div>
+                `;
+                const cssString = `
+                    <style>
+                        #displayArea {
+                            margin: 20px;
+                        }
+                        section {
+                            position: absolute;
+                            left : 30px;
+                            top: 30px;
+                        }
+
+                        section p button {
+                            width : 60px;
+                            height: 21px;
+                            border-radius: 0;
+                            background-color: lightgray;
+                        }
+                        
+                        section p button:hover {
+                            background-color: gray;
+                        }
+                        
+                        .center {
+                            margin: 0;
+                        }
+                        .center button{
+                            width: 20px;
+                            height: 25px;
+                            margin: 0;
+                            border-radius: 0;
+                            background-color: lightgray;
+                            font-size: 20px;
+                        }
+                        .center button:hover {
+                            background-color: gray;
+                        }
+                        .canvas {
+                            border: 1px solid black;
+                            margin-bottom: 20px;
+                        }
+
+                        button {
+                            color: white;
+                            border: 0;
+                            border-radius: 10px;
+                            font-size: 18px;
+                            width: 160px;
+                            height: 30px;
+                            cursor: pointer;
+                        }
+
+                        .option button {
+                            margin-top: 20px;
+                            background-color: lightgray;
+                        }
+
+                        .option button:hover {
+                            background-color: gray;
+                        }   
+
+                        #xAxis {
+                            background-color: lightcoral;
+                        }
+
+                        #xAxis:hover {
+                            background-color: red;
+                        }
+
+                        #yAxis {
+                            background-color: lightblue;
+                        }
+
+                        #yAxis:hover {
+                            background-color: blue;
+                        }
+
+                        #xyAxis {
+                            background-color: rgb(184, 230, 173);
+                        }
+
+                        #xyAxis:hover {
+                            background-color: darkgreen;
+                        }
+                    </style>
+                `;
+                document.getElementById('displayArea').innerHTML = htmlString + cssString;
+                this.canvas = document.getElementById('canvas');
+                this.pen = this.canvas.getContext('2d');
+                this.printUnit();
+                this.printCross();
+            }
+            defaultDot(x, y) {
+                this.pen.fillRect(x, y, 1, 1)
+            }
+            printDot(x, y) {
+                this.pen.fillRect(this.canvasWidth/2 + x * this.scaleFactor, this.canvasHeight/2 - y * this.scaleFactor, 1, 1);
+            }
+            printArr(x, y) {
+                this.pen.fillRect(this.canvasWidth/2 + x, this.canvasHeight/2 - y, 1, 1);
+            }
+            printCross(x, y) {
+                console.log(this.canvasWidth);
+                this.pen.fillStyle = 'black';
+                for (let i = 0; i < 500; i += 0.005) {
+                    this.defaultDot(i, this.canvasHeight/2);
+                }
+                for (let i = 0; i < 500; i += 0.005) {
+                    this.defaultDot(this.canvasWidth/2, i);
+                }
+            }
+            printUnit() {
+                this.pen.fillStyle = 'black';
+                for (let i = -(this.canvasWidth/2); i < this.canvasWidth/2; i++) {
+                    for (let j = -0.1; j < 0.11; j += 0.005) {
+                        this.printDot(i, j);
+                    }
+                }
+                for (let i = -(this.canvasHeight/2); i < this.canvasHeight/2; i++) {
+                    for (let j = -0.1; j < 0.11; j += 0.005) {
+                        this.printDot(j, i);
+                    }
+                }
+            }
+            firstGraph(x1, y1, x2, y2) {
+                let a = (y1 - y2) / (x1 - x2);
+                let b = y2 - (a * x2)
+                if (x1 < x2) {
+                    for (let x = x1; x < x2; x = x + 0.01) {
+                        this.printDot(x, (a * x) + b);
+                    }
+                } else {
+                    for (let x = x2; x < x1; x = x + 0.01) {
+                        this.printDot(x, (a * x) + b);
+                    }
+                }
+            }
+            fillArr(arrA, arrB) {
+                for (let i = 0; i < arrA.length-1; i++) {
+                    this.firstGraph(arrA[i], arrB[i], arrA[i + 1], arrB[i + 1])
+                    this.defaultArr.push([arrA[i], arrB[i], 0])
+                }
+                // console.log(this.defaultArr)
+            }
+            matrixMultiple(matrixA, matrixB) {
+                let resultArr = [];
+                let tempV = 0;
+                for (let i = 0; i < matrixA.length; i++) {
+                    resultArr.push([]);
+                    for (let j = 0; j < matrixB[0].length; j++) {
+                        for (let k = 0; k < matrixA[0].length; k++) {
+                            tempV += matrixA[i][k] * matrixB[k][j];
+                            // console.log(tempV)
+                        }
+                        resultArr[i].push(tempV);
+                        tempV = 0;
+                    }
+                }
+                return resultArr;
+            }
+            xAxisSymmetry() {
+                const resultArr = [];
+                const xAxisSymmetry = [[1, 0, 0], [0, -1, 0], [0, 0, 1]];
+                for (let i = 0; i < this.defaultArr.length; i++) {
+                    this.matrixMultiple([this.defaultArr[i]], xAxisSymmetry);
+                    // console.log([this.defaultArr[i]]);
+                    // console.log(xAxisSymmetry);
+                    resultArr.push(this.matrixMultiple([this.defaultArr[i]], xAxisSymmetry))
+                }
+                // console.log(resultArr);
+                this.pen.fillStyle = 'red';
+                for (let i = 0; i < resultArr.length-1; i++) {
+                    console.log(resultArr[i][0]);
+                    this.firstGraph(resultArr[i][0][0], resultArr[i][0][1], resultArr[i + 1][0][0], resultArr[i + 1][0][1])
+                }
+            }
+            yAxisSymmetry() {
+                const resultArr = [];
+                const yAxisSymmetry = [[-1, 0, 0], [0, 1, 0], [0, 0, 1]];
+                for (let i = 0; i < this.defaultArr.length; i++) {
+                    this.matrixMultiple([this.defaultArr[i]], yAxisSymmetry);
+                    resultArr.push(this.matrixMultiple([this.defaultArr[i]], yAxisSymmetry))
+                }
+                this.pen.fillStyle = 'blue';
+                for (let i = 0; i < resultArr.length-1; i++) {
+                    this.firstGraph(resultArr[i][0][0], resultArr[i][0][1], resultArr[i + 1][0][0], resultArr[i + 1][0][1])
+                }
+            }
+            xyAxisSymmetry() {
+                const resultArr = [];
+                const xyAxisSymmetry = [[-1, 0, 0], [0, -1, 0], [0, 0, 1]];
+                for (let i = 0; i < this.defaultArr.length-1; i++) {
+                    this.matrixMultiple([this.defaultArr[i]], xyAxisSymmetry);
+                    resultArr.push(this.matrixMultiple([this.defaultArr[i]], xyAxisSymmetry))
+                }
+                this.pen.fillStyle = 'green';
+                for (let i = 0; i < resultArr.length; i++) {
+                    this.firstGraph(resultArr[i][0][0], resultArr[i][0][1], resultArr[i + 1][0][0], resultArr[i + 1][0][1])
+                }
+            }
+            reDraw(arrA, arrB) {
+                this.pen.clearRect(0,0,500,500);
+                this.init();
+                this.fillArr(arrA, arrB);
+                if(this.isXon) { this.xAxisSymmetry(); }
+                if(this.isYon) { this.yAxisSymmetry(); }
+                if(this.isXYon) { this.xyAxisSymmetry(); }
+            }
+            toBigger(arrA, arrB) {    
+                this.scaleFactor += 5;
+                this.reDraw(arrA, arrB);
+            }
+            toSmaller(arrA, arrB) {
+                if(this.scaleFactor!=5) { this.scaleFactor -= 5; }
+                this.reDraw(arrA, arrB);
+            }
+            reset(arrA, arrB) {
+                this.pen.clearRect(0,0,500,500);
+                this.scaleFactor = 25;
+                this.init();
+                this.fillArr(arrA, arrB);
+                this.isXon = false;
+                this.isYon = false;
+                this.isXYon = false;
+            }
+            // toLeft(arrA, arrB) {
+            //     this.canvasWidth += 40 * (this.scaleFactor / 20);
+            //     // this.pen.clearRect(0,0,500,500);
+            //     this.reDraw(arrA, arrB);
+            // }
+            // toRight(arrA, arrB) {
+            //     this.canvasWidth -= 40 * (this.scaleFactor / 20);
+            //     this.reDraw(arrA, arrB);
+            // }
+            // toUp(arrA, arrB) {
+            //     this.canvasHeight += 40 * (this.scaleFactor / 20);
+            //     this.reDraw(arrA, arrB);
+            // }
+            // toDown(arrA, arrB) {
+            //     this.canvasHeight -= 40 * (this.scaleFactor / 20);
+            //     this.reDraw(arrA, arrB);
+            // }
+            // toCenter(arrA, arrB) {
+            //     this.canvasHeight = 500;
+            //     this.canvasWidth = 500;
+            //     this.reDraw(arrA, arrB);
+            // }
+            movement(arrA, arrB, getText) {
+                switch(getText) {
+                    case "up":
+                        this.canvasHeight += 40 * (this.scaleFactor / 20);
+                        this.reDraw(arrA, arrB);
+                        break;
+                    case "down":
+                        this.canvasHeight -= 40 * (this.scaleFactor / 20);
+                        this.reDraw(arrA, arrB);
+                        break;
+                    case "left":
+                        this.canvasWidth += 40 * (this.scaleFactor / 20);
+                        this.reDraw(arrA, arrB);
+                        break;
+                    case "right":
+                        this.canvasWidth -= 40 * (this.scaleFactor / 20);
+                        this.reDraw(arrA, arrB);
+                        break;
+                    case "center":
+                        this.canvasHeight = 500;
+                        this.canvasWidth = 500;
+                        this.reDraw(arrA, arrB);
+                        break;
+                }
+            }
+            eventControl(arrA, arrB) {
+                addEventListener('click', e => {
+                    switch (e.target.id) {
+                        case "xAxis":
+                            this.isXon = true;
+                            // console.log(this.isXon);
+                            this.xAxisSymmetry();
+                            break;
+                        case "yAxis":
+                            this.isYon = true;
+                            console.log(this.isYon);
+                            this.yAxisSymmetry();
+                            break;
+                        case "xyAxis":
+                            this.isXYon = true;
+                            console.log(this.isXYon);
+                            this.xyAxisSymmetry();
+                            break;
+                        case "up":
+                            this.movement(arrA, arrB, "up");
+                            break;
+                        case "down":
+                            this.movement(arrA, arrB, "down");    
+                            break;
+                        case "left":
+                            this.movement(arrA, arrB, "left");
+                            break;
+                        case "right":
+                            this.movement(arrA, arrB, "right");
+                            break;
+                        case "center":
+                            this.movement(arrA, arrB, "center");
+                            break;
+                        case "bigger":
+                            this.toBigger(arrA, arrB);
+                            break;
+                        case "smaller":
+                            this.toSmaller(arrA, arrB);
+                            break;
+                        case "reset":
+                            this.reset(arrA, arrB);
+                            break;
+                    }
+                })
+            }
+            running(arrA, arrB) {
+                this.init();
+                // this.printDot(10, 10);
+                // this.printUnit();
+                // this.printCross();
+                this.fillArr(arrA, arrB);
+                this.eventControl(arrA, arrB);
+            }
+        }
+
+        const main = (() => {
+            const canvas = new Canvas('canvas');
+            const myX = [-5, -4, -3, -2, -1, 0, 4, 2, 3, 4, 5];
+            const myY = [5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5];
+            canvas.running(myX, myY);
+        })();
+    </script>
+</body>
+
+</html>

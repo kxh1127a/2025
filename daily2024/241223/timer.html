@@ -1,0 +1,44 @@
+<style>
+    * { margin: 0; padding: 0; }
+    .timerArea {
+        width: 100px; height: 100px;
+        border-radius: 50%;
+        background-color: orange; color: white;
+        text-align: center; line-height: 100px;
+        font-size: 30px;
+    }
+    </style>
+    <div id="timerArea" class="timerArea">0</div>
+    <button id="startBtn">START</button>
+    <button id="stopBtn">STOP</button>
+    <button id="resetBtn">RESET</button>
+    <script>
+    let currentValue = 0;
+    
+    const startTimer = () => {
+        const timer = () => {
+                    currentValue++;
+                    document.getElementById('timerArea').innerHTML = currentValue;
+                }
+        setInterval(timer, 1000)
+    }
+    const stopTimer = () => {
+        clearInterval(timer)
+    }
+    addEventListener('click', (e)=>{
+        switch(e.target.id) {
+            case "startBtn":
+                currentValue = document.getElementById('timerArea').innerHTML;
+                startTimer();
+                break;
+            case "stopBtn":
+                stopTimer();
+                break;
+            case "resetBtn":
+                document.getElementById('timerArea').innerHTML = 0;
+                clearInterval(timer);
+                currentValue = 0;
+                break;
+        }
+    })
+    </script>

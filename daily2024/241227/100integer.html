@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 integer</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="outputArea"></div>
+    <div id="canvasArea">
+        <canvas id="canvas" class="canvas" width="500" height="500"></canvas>
+        <canvas id="dispersion" class="canvas" width="500" height="500"></canvas>
+    </div>
+    <script>
+        class Integer {
+            constructor(id) {
+                this.id = id;
+                this.storage = [];
+                this.sortedArr = [];
+                this.avgValue = 0;
+                this.medianValue = 0;
+                this.minValue = 0;
+                this.maxValue = 0;
+                this.mode = [];
+                this.standardDeviation = 0;
+                this.standardDeviationArr = [];
+            }
+            createNumber() {
+                let index = 1;
+                while (this.storage.length < 100) {
+                    this.storage.push(Math.floor(Math.random() * (100 + 1)));
+                }
+                this.storage.forEach(v => {
+                    if (index % 10 == 0) {
+                        document.getElementById('outputArea').innerHTML += (v + "<br>");
+                        index++;
+                    } else {
+                        document.getElementById('outputArea').innerHTML += (v + ",")
+                        index++;
+                    }
+                })
+            }
+            getAverage() {
+                let totalSum = 0;
+                this.storage.forEach(v => {
+                    totalSum += v;
+                })
+                this.avgValue = totalSum / this.storage.length;
+                document.getElementById('outputArea').innerHTML += `<br><p> Mean: ${this.avgValue}</p>`;
+                let doubleTotal = 0;
+                this.storage.forEach(v => {
+                    doubleTotal += (v - this.avgValue) ** 2
+                    // this.standardDeviationArr.push(((v-this.avgValue)**2)/(this.storage.length))
+                })
+                this.standardDeviation = Math.sqrt(doubleTotal / this.storage.length)
+                console.log(this.standardDeviation);
+                document.getElementById('outputArea').innerHTML += `<p> Standard Deviation: ${this.standardDeviation}</p>`;
+            }
+            selectionSort() {
+                let sortedStorage = [...this.storage];
+                for (let i = 0; i < sortedStorage.length; i++) {
+                    let maxIndex = i;
+                    for (let j = i + 1; j < sortedStorage.length; j++) {
+                        if (sortedStorage[maxIndex] < sortedStorage[j]) {
+                            maxIndex = j;
+                        }
+                    }
+                    if (maxIndex != i) {
+                        let tempV = sortedStorage[i];
+                        sortedStorage[i] = sortedStorage[maxIndex];
+                        sortedStorage[maxIndex] = tempV;
+                    }
+                }
+                const medianValue = (sortedStorage[(this.storage.length / 2) - 1] + sortedStorage[this.storage.length / 2]) / 2
+                const maxValue = sortedStorage[0];
+                const minValue = sortedStorage[this.storage.length - 1]
+                console.log(sortedStorage);
+                document.getElementById('outputArea').innerHTML += ("<br> Median: " + medianValue);
+                document.getElementById('outputArea').innerHTML += ("<br> Min: " + minValue);
+                document.getElementById('outputArea').innerHTML += ("<br> Max: " + maxValue);
+            }
+            insertionSort() {
+                let sortedStorage = [...this.storage];
+                for (let i = 0; i < sortedStorage.length - 1; i++) {
+                    if (sortedStorage[i] > sortedStorage[i + 1]) {
+                        let tempV = sortedStorage[i];
+                        sortedStorage[i] = sortedStorage[i + 1];
+                        sortedStorage[i + 1] = tempV;
+                        for (let j = i; j >= 0; j--) {
+                            if (sortedStorage[j] < sortedStorage[j - 1]) {
+                                let tempV2 = sortedStorage[j - 1];
+                                sortedStorage[j - 1] = sortedStorage[j];
+                                sortedStorage[j] = tempV2;
+                            }
+                        }
+                    }
+                }
+                this.medianValue = (sortedStorage[(this.storage.length / 2) - 1] + sortedStorage[this.storage.length / 2]) / 2
+                this.minValue = sortedStorage[0];
+                this.maxValue = sortedStorage[this.storage.length - 1]
+                console.log(sortedStorage);
+                this.sortedArr = [...sortedStorage];
+                document.getElementById('outputArea').innerHTML += `<p style="color:blue"> Median: ${this.medianValue}</p>`;
+                document.getElementById('outputArea').innerHTML += `<p style="color:red"> Min: ${this.minValue}</p>`;
+                document.getElementById('outputArea').innerHTML += `<p style="color:red"> Max: ${this.maxValue}</p>`;
+
+                const iterator = sortedStorage[Symbol.iterator]();
+                let iteratorElement = iterator.next();
+                console.log(iteratorElement);
+                let modeArr = [[]];
+
+                while (!iteratorElement.done) {
+                    if (modeArr[0][0] != undefined) {
+                        if (modeArr[modeArr.length - 1][0] == iteratorElement.value) {
+                            modeArr[modeArr.length - 1][1] += 1;
+                        } else {
+                            modeArr.push([iteratorElement.value, 1])
+                        }
+                        iteratorElement = iterator.next();
+                    } else {
+                        modeArr[0] = [iteratorElement.value, 0]
+                    }
+                }
+                console.log(modeArr);
+                let maxIndex = 0;
+                this.mode = [];
+                modeArr.forEach(v => {
+                    if (v[1] > maxIndex) {
+                        maxIndex = v[1];
+                    }
+                })
+                console.log(maxIndex);
+                modeArr.forEach(v => {
+                    if (v[1] == maxIndex) {
+                        this.mode.push(v[0])
+                    }
+                })
+                console.log(this.mode);
+                document.getElementById('outputArea').innerHTML += (`<p style="color:green">Mode: ${this.mode}</p>`);
+            }
+            displayCanvas() {
+                const pen = document.getElementById('canvas').getContext('2d');
+                const printDot = (x, y) => {
+                    pen.fillRect(250 + x, 250 - y, 1, 1)
+                }
+                const printCross = () => {
+                    for (let i = -200; i < 250; i++) {
+                        printDot(-200, i);
+                        printDot(i, -200);
+                    }
+                }
+                printCross();
+
+                const modiDot = (x, y) => {
+                    pen.fillRect(50 + x * 4, 425 - y * 4, 1, 1)
+                }
+                const yModiDot = (x, y) => {
+                    pen.fillRect(70 + x * 4, 425 - y * 4, 1.5, 1.5)
+                }
+                const modiText = (x, y, text) => {
+                    pen.fillText(text, 50 + x * 4, 425 - y * 4)
+                }
+                const printUnit = () => {
+                    for (let x = 0; x <= 100; x += 10) {
+                        modiText(-6, x, x);
+                    }
+                    for (let y = 0; y <= 100; y += 10) {
+                        for (let x = -1; x <= 1; x = x + 0.1) {
+                            modiDot(x, y)
+                        }
+                    }
+                    // for (let x = 1; x<=100; x++) {
+                    //     for (let y=0; y<=0.7; y=y+0.1) {
+                    //         yModiDot(x, y)
+                    //     }
+                    // }
+                }
+                printUnit();
+
+                const firstUnit = (x, y) => {
+                    for (let x = 0; x <= 100; x += 0.1) {
+                        pen.fillStyle = 'lightgray';
+                        yModiDot(x, x);
+                    }
+                }
+                firstUnit();
+
+                this.sortedArr.forEach((v1, i1) => {
+                    this.mode.forEach((v2, i2) => {
+                        if (v1 == v2) {
+                            pen.fillStyle = 'green';
+                            yModiDot(i1 + 1, v1);
+                        } else {
+                            if (v1 == this.minValue || v1 == this.maxValue) {
+                                pen.fillStyle = 'red';
+                                yModiDot(i1 + 1, v1);
+                            } else {
+                                pen.fillStyle = 'black';
+                                yModiDot(i1 + 1, v1);
+                            }
+                        }
+                    })
+                })
+
+                for (let x = 0; x < 500; x++) {
+                    pen.fillStyle = 'black';
+                    modiDot(x, this.avgValue);
+                    pen.fillStyle = 'blue';
+                    modiDot(x, this.medianValue);
+                    pen.fillStyle = 'red';
+                    modiDot(x, this.maxValue);
+                    modiDot(x, this.minValue);
+                    pen.fillStyle = 'green';
+                    this.mode.forEach(v => {
+                        modiDot(x, v);
+                    })
+                }
+
+                for (let y = this.avgValue - this.standardDeviation; y <= this.avgValue + this.standardDeviation; y += 0.5) {
+                    for (let x = 0; x < 500; x += 0.5) {
+                        pen.fillStyle = 'lightgray';
+                        modiDot(x, y)
+                    }
+                }
+            }
+            dispersion() {
+                const pen = document.getElementById('dispersion').getContext('2d');
+                const printDot = (x, y) => {
+                    pen.fillRect(250 + x, 250 - y, 1, 1)
+                }
+                const printCross = () => {
+                    for (let i = -200; i < 250; i++) {
+                        printDot(-200, i);
+                        printDot(i, -200);
+                    }
+                }
+                printCross();
+
+                const modiDot = (x, y) => {
+                    pen.fillRect(50 + x * 4, 450 - y * 4, 1, 1)
+                }
+                const yModiDot = (x, y) => {
+                    pen.fillRect(70 + x * 4, 450 - y * 4, 1.5, 1.5)
+                }
+                const modiText = (x, y, text) => {
+                    pen.fillText(text, 50 + x * 4, 450 - y * 4)
+                }
+                const printUnit = () => {
+                    for (let x = 0; x <= 100; x += 10) {
+                        modiText(-6, x, x);
+                    }
+                    for (let y = 10; y <= 100; y += 10) {
+                        for (let x = -1; x <= 1; x = x + 0.1) {
+                            modiDot(x, y)
+                        }
+                    }
+                }
+                printUnit();
+
+                console.log(this.sortedArr);
+                this.sortedArr.forEach(v => {
+                    this.standardDeviationArr.push(Math.abs(Math.sqrt(((v - this.avgValue) ** 2))))
+                })
+                console.log(this.standardDeviationArr)
+                this.standardDeviationArr.forEach((v, i) => {
+                    yModiDot(i, v)
+                })
+            }
+            running() {
+                this.createNumber();
+                this.getAverage();
+                // this.getSort();
+                // this.selectionSort();
+                this.insertionSort();
+                this.displayCanvas();
+                this.dispersion();
+            }
+        }
+        const main = (() => {
+            const integer = new Integer('integer');
+            integer.running();
+        })();
+    </script>
+</body>
+
+</html>

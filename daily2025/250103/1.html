@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>super</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+   <div>
+        <span>높이 <input id="height" type="text"></span>
+        <span>각a <input id="angleA" type="text"></span>
+        <span>각b <input id="angleB" type="text"></span>
+        <button id="btn">삼각형 그리기</button>
+   </div>
+   <div>
+        <canvas id="canvas" class="canvas" width="500" height="500"></canvas>
+   </div> 
+   <script>
+        class Super {
+            constructor(id) {
+                this.id = id;
+                this.height = 0;
+                this.angleA = 0;
+                this.angleB = 0;
+                this.angleC = 0;
+                this.canvas = document.getElementById('canvas');
+                this.pen = canvas.getContext('2d');
+            }
+            getValue() {
+                addEventListener('click', e=>{
+                    switch (e.target.id) {
+                        case "btn":
+                            this.height = Number(document.getElementById('height').value);
+                            this.angleA = Number(document.getElementById('angleA').value);
+                            this.angleB = Number(document.getElementById('angleB').value);
+                            this.angleC = 180 - this.angleA - this.angleB;
+                            console.log(this.height, this.angleA, this.angleB, this.angleC);
+                            this.drawTriangle();
+                            break;
+                    }
+                })
+            }
+            printDot(x, y) {
+                this.pen.fillRect(250+x,  250-y, 1,1)
+            }
+            modiDot(x, y) {
+                this.pen.fillRect(50+x, 450-y, 1.5, 1.5)
+            }
+            printCross() {
+                for(let i=-250; i<=250; i++) {
+                    this.printDot( -200, i);
+                    this.printDot(i, -200);
+                }
+            }
+            drawTriangle() {
+                const a = (Math.sin(this.angleA*(Math.PI/180))*this.height) / Math.sin(this.angleC*(Math.PI/180))
+                console.log(a)
+
+                const angleB90 = 90-this.angleB;
+                const radianB90 = angleB90 * ((Math.PI)/180);
+                const x = Math.cos(radianB90) * 200;
+                const y = Math.sin(radianB90) * 200;
+                console.log(x, y)
+                const gi = y/ x;
+                const gi2 = (y-this.height) / x
+                this.pen.fillStyle = 'red';
+                for(let i=0; i<=x; i++) {
+                    this.modiDot(i, gi*i )
+                    this.modiDot(i, gi2*i + 300 )
+                }
+                for(let yy=0; yy<=this.height; yy++) {
+                    this.modiDot(0, yy)
+                }
+                                
+            }
+            running() {
+                this.getValue();
+                this.printDot(0,0);
+                this.printCross();
+            }
+        }
+
+        const super1 = new Super('super1');
+        super1.running();
+
+   </script>
+</body>
+</html>

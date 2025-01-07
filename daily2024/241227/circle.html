@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>circle on canvas</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        input {
+            width: 25px;
+        }
+
+        .canvas {
+            border: 1px solid black;
+            margin-top: 10px;
+        }
+
+        #divideBtn {
+            background-color: dodgerblue;
+            border: none;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>circle</h1>
+        <input id="divideValue" type="text" placeholder="n">등분하기
+        <button id="divideBtn">실행</button>
+
+    </div>
+    <div><canvas id="canvas" class="canvas" width="500" height="500"></canvas></div>
+    <script>
+        class DrawCircle {
+            constructor(id) {
+                this.id = id;
+                this.canvas = document.getElementById('canvas');
+                this.pen = canvas.getContext('2d');
+            }
+            getValue() {
+                addEventListener('click', e => {
+                    switch (e.target.id) {
+                        case "divideBtn":
+                            const divideValue = document.getElementById('divideValue').value;
+                            this.pen.clearReact(0, 0, 500, 500);
+                            this.printCross();
+                            this.drawCircle();
+                            this.divideCircle(divideValue);
+                            break;
+                    }
+                })
+            }
+            printDot(x, y) {
+                this.pen.fillRect(250 + x * 50, 250 - y * 50, 1, 1)
+            }
+            printCross() {
+                for (let i = -5; i <= 5; i += 0.1) {
+                    this.printDot(i, 0);
+                    this.printDot(0, i);
+                }
+                for (let i = -5; i <= 5; i += 1) {
+                    for (let j = -0.05; j <= 0.05; j += 0.05) {
+                        this.printDot(i, j)
+                        this.printDot(j, i)
+                    }
+                }
+            }
+
+            divideCircle(divideValue) {
+                let firstValue = 360 / divideValue;
+                for (let angle = firstValue; angle <= 361; angle += firstValue) {
+                    let radian = angle * (Math.PI / 180);
+                    let sin = Math.sin(radian) * 2;
+                    let cos = Math.cos(radian) * 2;
+                    console.log(sin, cos)
+                    let a = sin / cos;
+                    this.pen.fillStyle = 'dodgerblue';
+                    if (cos > 0) {
+                        for (let x = 0; x <= cos; x += 0.01) {
+                            this.printDot(x, a * x)
+                        }
+                    } else {
+                        for (let x = cos; x <= 0; x += 0.01) {
+                            this.printDot(x, a * x)
+                        }
+                    }
+                }
+
+
+            }
+            drawCircle(a = 0, b = 0, r = 2, r1 = -180, r2 = 180) {
+                const canvas = document.getElementById('canvas');
+                const pen = canvas.getContext('2d');
+                //(x-a)**2 + (x-b)**2 = r**2
+                const printDot = (x, y) => {
+                    pen.fillRect(250 + x * 50, 250 - y * 50, 1, 1)
+                }
+                // const printCross =(()=>{
+                //     for(let i=-250; i<250; i+=0.1) {
+                //         printDot(0, i);
+                //         printDot(i, 0)
+                //     }
+                // })();
+
+                const radius = Math.sqrt(r);
+
+                for (let angle = r1; angle < r2; angle++) {
+                    const radian = angle * Math.PI / 180;
+                    const sin = Math.sin(radian) * r;
+                    const cos = Math.cos(radian) * r;
+                    printDot(cos + a, sin + b)
+                }
+            }
+            nDivide() {
+
+            }
+            running() {
+                this.getValue();
+                this.printCross();
+                this.drawCircle((Math.sqrt(3) / Math.sqrt(2)), (Math.sqrt(5) / Math.sqrt(3)), Math.sqrt(14));
+            }
+        }
+
+
+        
+        const main = (() => {
+            const drawCircle = new DrawCircle('drawCircle');
+            drawCircle.running();
+        })();
+    </script>
+</body>
+
+</html>

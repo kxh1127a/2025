@@ -1,0 +1,80 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal; }
+
+body, html {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.fullBox {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 75px; }
+  .fullBox .headBox {
+    display: flex;
+    justify-content: center; }
+    .fullBox .headBox .w1 {
+      color: #4285F4;
+      font-size: 100px;
+      margin-top: -7%; }
+    .fullBox .headBox .w2 {
+      color: #EA4335; }
+    .fullBox .headBox .w3 {
+      color: #FBBC05; }
+    .fullBox .headBox .w4 {
+      color: #4285F4; }
+    .fullBox .headBox .w5 {
+      color: #34A853; }
+    .fullBox .headBox .w6 {
+      color: #EA4335; }
+  .fullBox .midBox {
+    width: 100%; }
+    .fullBox .midBox .midmidBox {
+      width: 100%;
+      display: flex;
+      justify-content: center; }
+      .fullBox .midBox .midmidBox .search {
+        width: 30%;
+        height: 5vh;
+        border: 1px solid lightgray;
+        border-radius: 30px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 5px;
+        margin: 1% 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px; }
+        .fullBox .midBox .midmidBox .search div {
+          display: flex;
+          align-items: center; }
+          .fullBox .midBox .midmidBox .search div i {
+            font-size: 25px;
+            color: gray;
+            margin: 0 5px; }
+  .fullBox .footBox {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    .fullBox .footBox button {
+      background-color: #f8f7f7;
+      border: none;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 400;
+      height: 1%;
+      padding: 1%;
+      margin: 3%; }
+
+/*# sourceMappingURL=bbb.css.map */

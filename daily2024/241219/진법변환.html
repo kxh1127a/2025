@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta vset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jinbub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="printArea">
+    </div>
+
+    <script>
+        class BaseNumber {
+            constructor(id) {
+                this.id = id;
+                this.valueNumber = '';
+                this.valueBase = '';
+                this.total = 0;
+            }
+            setDisplay() {
+                const htmlString = `
+                <div class="outerWrap">
+                    <div class="innerWrap">
+                        <div class="titleArea"><h1>진법변환기</h2></div>
+                        <input class="valueA" id="valueA" type="text" placeholder="숫자"><sub><input class="valueB" id="valueB" type="text" placeholder="진법"></sub>
+                        <div>
+                            <button id="toBin">2진법변환</button>
+                            <button id="toOct">8진법변환</button>
+                            <button id="toTen">10진법변환</button>
+                            <button id="toHex">16진법변환</button>
+                        </div><p></p>
+                    <div>
+                </div><p></p>
+                <div id="resultArea"></div>`;
+                const cssString = `
+                <style>
+                    body {
+                        background-color: white;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                    }
+
+                    .outerWrap {
+                        width: 400px;
+                        background-color: lightgray;
+                        border-radius: 8px;
+                        box-shadow: 8px 4px 6px rgba(0, 0, 0, 0.1);
+                    }
+
+                    .innerWrap {
+                        padding: 20px;
+                        text-align: center;
+                    }
+
+                    h1 {
+                        font-size: 24px;
+                        margin-bottom: 20px;
+                        color: #555;
+                    }
+
+                    .valueA {
+                        width: 100px;
+                        padding: 10px;
+                        margin: 5px;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                    }
+
+                    .valueB {
+                        width: 28px;
+                        height: 25px;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+
+                    }
+
+                    button {
+                        margin: 10px 5px;
+                        padding: 10px 20px;
+                        font-size: 14px;
+                        background-color: gray;
+                        color: #fff;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }
+
+                    button:hover {
+                        background-color: black;
+                    }
+
+                    #resultArea {
+                        margin-top: 20px;
+                        font-size: 18px;
+                        font-weight: bold;
+                        height: 30px;
+                    }
+                </style>`
+                document.getElementById('printArea').innerHTML = htmlString + cssString;
+            }
+            getValue() {
+                this.valueNumber = document.getElementById('valueA').value;
+                this.valueBase = document.getElementById('valueB').value;
+            }
+            toTen() {
+                this.total = 0;
+                const hexaDefault = { 'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15 };
+                const valueArray = this.valueNumber.split('');
+                if (this.valueBase == 16) {
+                    valueArray.forEach((v, i) => {
+                        if (hexaDefault[v]) {
+                            this.total += hexaDefault[v] * 16 ** (this.valueNumber.length - i - 1);
+                        } else {
+                            this.total += Number(v) * 16 ** (this.valueNumber.length - i - 1);
+                        }
+                    });
+                } else {
+                    valueArray.forEach((v, i) => {
+                        this.total += Number(v) * Number(this.valueBase) ** (this.valueNumber.length - i - 1);
+                    });
+                }
+                this.tenValue = String(this.total);
+            }
+            toBin() {
+                this.toTen();
+                let tempV = Number(this.tenValue);
+                let totalBin = '';
+                let binArr = [];
+
+                while (tempV > 1) {
+                    if (tempV % 2 == 0) {
+                        binArr.unshift(0);
+                        tempV = tempV / 2;
+                    } else {
+                        binArr.unshift(1);
+                        tempV = (tempV - 1) / 2;
+                    }
+                }
+                binArr.unshift(1);
+                totalBin = binArr.join('');
+                console.log(binArr);
+                document.getElementById('resultArea').innerHTML = `${totalBin}<sub>(2)</sub>`;
+            }
+            toOct() {
+                this.toTen();
+                let tempV = Number(this.tenValue);
+                let totalOct = '';
+                let octArr = [];
+
+                while (tempV > 7) {
+                    octArr.unshift(tempV % 8);
+                    tempV = Math.floor(tempV / 8);
+                }
+
+                octArr.unshift(tempV);
+                totalOct = octArr.join('');
+                console.log(octArr);
+                document.getElementById('resultArea').innerHTML = `${totalOct}<sub>(8)</sub>`;
+            }
+            toHex() {
+                this.toTen();
+                let tempV = Number(this.tenValue);
+                const hexDefault = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F'];
+                let totalHex = '';
+                let hexArr = [];
+
+                while (tempV > 15) {
+                    hexArr.unshift(hexDefault[tempV % 16]);
+                    tempV = Math.floor(tempV / 16);
+                }
+
+                hexArr.unshift(hexDefault[tempV]);
+                totalHex = hexArr.join('');
+                console.log(hexArr);
+                document.getElementById('resultArea').innerHTML = `${totalHex}<sub>(16)</sub>`;
+            }
+
+            eventControl() {
+                window.addEventListener('click', (e) => {
+                    switch (e.target.id) {
+                        case "toTen":
+                            this.getValue();
+                            this.toTen();
+                            document.getElementById('resultArea').innerHTML = `${this.total}<sub>(10)</sub>`;
+                            break;
+                        case "toBin":
+                            this.getValue();
+                            this.toBin();
+                            break;
+                        case "toOct":
+                            this.getValue();
+                            this.toOct();
+                            break;
+                        case "toHex":
+                            this.getValue();
+                            this.toHex();
+                            break;
+                    }
+                })
+            }
+            running() {
+                this.setDisplay();
+                this.eventControl();
+            }
+        }
+
+        const baseNumber = new BaseNumber('baseNumber');
+        baseNumber.running();
+    </script>
+
+</body>
+
+</html>

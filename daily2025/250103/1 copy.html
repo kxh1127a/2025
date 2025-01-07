@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>super</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+   <!-- <div>
+        <span>높이 <input id="height" type="text"></span>
+        <span>각a <input id="angleA" type="text"></span>
+        <span>각b <input id="angleB" type="text"></span>
+        <button id="btn">삼각형 그리기</button>
+   </div> -->
+   <div>
+        <canvas id="canvas" class="canvas" width="1000" height="1000"></canvas>
+   </div> 
+   <script>
+        class Super {
+            constructor(id) {
+                this.id = id;
+                this.height = 150;
+                this.dae = 240;
+                this.angleA = 60*(Math.PI/180);
+                this.angleB = 30*(Math.PI/180);
+                this.angleC = 0;
+                this.canvas = document.getElementById('canvas');
+                this.pen = canvas.getContext('2d');
+            }
+            printDot(x, y) {
+                this.pen.fillRect(250+x,  500-y, 1,1)
+            }
+            modiDot(x, y) {
+                this.pen.fillRect(50+x, 500-y, 1.5, 1.5)
+            }
+            printCross() {
+                for(let i=-1000; i<=1000; i++) {
+                    this.printDot( -200, i);
+                    this.printDot(i, 0);
+                }
+            }
+            printUnit() {
+                for(let x=-1000; x<=1000; x+=30) {
+                    for(let y=-3; y<=3; y++) {
+                        this.modiDot(x,y)
+                    }
+                }
+                for(let y=-500; y<=500; y+=100) {
+                    for(let x=-3; x<=3; x++) {
+                        this.modiDot(x,y)
+                    }
+                }
+            }
+            drawSin() {
+                for(let angle=-100; angle<=1000; angle+=0.5) {
+                    let ladian = angle * (Math.PI/180);
+                    let sinValue = Math.sin(ladian);
+                    let cosValue = Math.cos(ladian);
+                    let tanValue = Math.tan(ladian);
+                    this.modiDot(angle, sinValue*150);
+                    this.modiDot(angle, cosValue*150);
+                    this.modiDot(angle, tanValue*150);
+                }
+            }
+            drawTriangle() {
+                const x = Math.cos(this.angleB)*this.dae;
+                const y = Math.sin(this.angleB)*this.dae;
+
+                for(let i=0; i<=x; i++) {
+                    this.modiDot(i, (y/x)*i)
+                }
+                for(let i=0; i<y; i++) {
+                    this.modiDot(x, i)
+                }
+                for(let i=0; i<=x; i+=0.1) {
+                    let gi = (y-this.height)/x
+                    this.modiDot(i, gi*i+this.height);
+                }         
+            }
+            running() {
+                this.printCross();
+                this.printUnit();
+                // this.drawTriangle();
+                this.drawSin();
+            }
+        }
+
+        const super1 = new Super('super1');
+        super1.running();
+
+   </script>
+</body>
+</html>

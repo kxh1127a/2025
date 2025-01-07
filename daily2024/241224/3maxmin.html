@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <input id="1" type="number">
+        <input id="2" type="number">
+        <input id="3" type="number">
+    </div>
+    <div>
+        <button id="compareBtn">compare</button>
+    </div>
+    <div id="outputArea"></div>
+    <script>
+        class CompareNumber {
+            constructor(id) {
+                this.id = id;
+                this.getArr = [];
+                this.resultArr = [];
+            }
+            inputSect() {
+                addEventListener('click', (e) => {
+                    switch (e.target.id) {
+                        case "compareBtn":
+                            this.getArr = [];
+                            for (let i = 1; i <= 3; i++) {
+                                let tempV = Number(document.getElementById(i).value);
+                                this.getArr.push(tempV)
+                                // this.v1 = document.getElementById('v1').value;
+                            }
+                            // console.log(this.getArr);
+                            this.calcSect();
+                            break;
+                    }
+                })
+            }
+            calcSect() {
+                this.resultArr = [];
+                this.resultArr = [...this.getArr];
+                this.resultArr = this.resultArr.sort((a, b) => a - b);
+                console.log(this.getArr)
+                console.log(this.resultArr)
+                this.outputSect();
+            }
+            outputSect() {
+                document.getElementById('outputArea').innerHTML = '';
+                for (let i = 0; i < this.resultArr.length; i++) {
+                    if (i == 0) {
+                        document.getElementById('outputArea').innerHTML += `min : ${this.resultArr[i]} <br>`
+                    } else if (i == 2) {
+                        document.getElementById('outputArea').innerHTML += `max : ${this.resultArr[i]}`
+                    }
+                }
+            }
+            running() {
+                this.inputSect();
+            }
+        }
+
+        const main = (() => {
+            const compareNumber = new CompareNumber('compareNumber');
+            compareNumber.running();
+        })();
+    </script>
+</body>
+
+</html>

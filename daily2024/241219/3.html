@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        input {
+            width: 50px;
+            height: 50px;
+
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p><input id="valueA" type="number"> + <input id="valueB" type="number"> i</p>
+        <p><input id="valueC" type="number"> + <input id="valueD" type="number"> i</p>
+        <p><button id="sumBtn">합</button></p>
+        <p><button id="multiBtn">곱</button></p>
+    </div>
+    <div id="resultArea">
+
+    </div>
+    <script>
+        class Bok {
+            constructor(id){
+                this.id = id;
+                this.valueA = 0;
+                this.valueB = 0;
+                this.valueC = 0;
+                this.valueD = 0;
+            }
+            getValue() {
+                this.valueA = Number(document.getElementById('valueA').value);
+                this.valueB = Number(document.getElementById('valueB').value);
+                this.valueC = Number(document.getElementById('valueC').value);
+                this.valueD = Number(document.getElementById('valueD').value);
+            }
+            sumValue() {
+                const aPart = this.valueA + this.valueC;
+                const bPart = this.valueB + this.valueD;
+                const inputHtml = `${aPart}+${bPart}i`;
+                document.getElementById('resultArea').innerHTML = inputHtml; 
+            }
+            multiValue() {
+                const aPart = (this.valueA * this.valueC) - (this.valueB * this.valueD);
+                const bPart = (this.valueA * this.valueD) + (this.valueB * this.valueC);
+                const inputHtml = `${aPart}+${bPart}i`;
+                document.getElementById('resultArea').innerHTML = inputHtml; 
+            }
+            eventControl() {
+                window.addEventListener('click', (e)=>{
+                    switch(e.target.id) {
+                        case "sumBtn" :
+                            this.getValue();
+                            this.sumValue();
+                            // console.log(this.valueB)
+                            break;
+                        case "multiBtn" :
+                            this.getValue();
+                            this.multiValue();
+                            // console.log(this.valueC)
+                            break;
+                    }
+                })
+            }
+            running() {
+                this.eventControl();
+            }
+        }
+
+        const bok = new Bok('bok');
+        bok.running();
+    </script>
+</body>
+</html>

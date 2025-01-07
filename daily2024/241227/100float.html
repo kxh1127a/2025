@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 float</title>
+</head>
+<body>
+    <div id="outputArea"></div>
+    <div id="valueArea"></div>
+    <script>
+        class Float {
+            constructor(id) {
+                this.id = id;
+                this.storage = [];
+            }
+            createNumber() {
+                for(let i=0; i<100; i++) {
+                    this.storage.push(Math.random()*(200000+1)-100000);
+                }
+
+                this.storage.forEach((v,i)=>{
+                    if (i%5==0) {
+                    document.getElementById('valueArea').innerHTML += `<br>${v}<br>`                    
+                } else {
+                        document.getElementById('valueArea').innerHTML += `${v}<br>`
+                    }
+                })
+            }
+            calcNumber() {
+                let totalValue = 0;
+                this.storage.forEach(v=>{
+                    totalValue += v;
+                })
+                const mean = totalValue / this.storage.length;
+                document.getElementById('outputArea').innerHTML = `평균: ${mean}`
+            }
+            running() {
+                this.createNumber();
+                this.calcNumber();    
+            }
+        }
+        const main = (() => {
+            const float = new Float('float');
+            float.running();
+        })();
+    </script>
+</body>
+</html>

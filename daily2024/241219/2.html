@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            display: inline-block;
+            /* float: left; */
+        }
+        input {
+            width: 50px;
+            height: 50px;
+        }
+        button {
+            width: 100px;
+            height: 50px;
+            background-color: skyblue;
+            border: 0px;
+            border-radius: 10px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p><input id="ja" type="number"></p>
+        <p><input id="mo" type="number"></p>
+
+    </div>
+    <div><button id="lowBtn">lowest</button></div>
+    <div id="resultArea"></div>
+    <script>
+        class Lowest {
+            constructor(id) {
+                this.id = id;
+                this.ja = 0;
+                this.mo = 0;
+                this.arr = [];
+            }
+            getNumber() {
+                document.getElementById('lowBtn').addEventListener('click', (e)=>{
+                    this.ja = Number(document.getElementById('ja').value);
+                    this.mo = Number(document.getElementById('mo').value);
+                    
+                    this.getValue();
+                })
+            }
+            getValue() {
+                this.arr = [];
+                for(let i=1; i<=this.ja; i++) {
+                    if (this.ja % i == 0) {
+                        if (this.mo % i == 0) {
+                            this.arr.push(i);
+                        }
+                    }
+                }
+                console.log(this.arr);
+                this.printValue();
+            }
+            printValue() {
+                const inputHtml = `<p> ${this.ja / this.arr[this.arr.length-1]}</p><p>ㅡ</p><p> ${this.mo / this.arr[this.arr.length-1]}</p>`;
+
+                document.getElementById('resultArea').innerHTML = inputHtml;
+
+            }
+            running() {
+                this.getNumber();
+            }
+        }
+        const lowest = new Lowest('lowest');
+        lowest.running();
+    </script>
+</body>
+</html>

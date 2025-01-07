@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>super</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+   <div>
+        <span>y= <input id="totalMulti" type="text"></span>
+        <select name="sel" id="sel">
+            <option value="sin">sin</option>
+            <option value="cos">cos</option>
+            <option value="tan">tan</option>
+        </select>
+        <span><input id="angleMulti" type="text">x</span>
+        <p><button id="btn">그리기</button></p>
+   </div>
+   <div>
+        <canvas id="canvas" class="canvas" width="500" height="500"></canvas>
+   </div> 
+   <script>
+        class Super {
+            constructor(id) {
+                this.id = id;
+                this.canvas = document.getElementById('canvas');
+                this.pen = canvas.getContext('2d');
+                this.totalMulti = 1;
+                this.angleMulti = 1;
+                this.sel = null;
+            }
+            printDot(x, y) {
+                this.pen.fillRect(250+x, 250-y, 1,1)
+            }
+            modiDot(x, y) {
+                this.pen.fillRect(250+x, 250-y, 1, 1)
+            }
+            printCross() {
+                for(let i=-1000; i<=1000; i++) {
+                    this.printDot( 0, i);
+                    this.printDot(i, 0);
+                }
+            }
+            printUnit() {
+                for(let x=-1000; x<=1000; x+=100) {
+                    for(let y=-3; y<=3; y++) {
+                        this.modiDot(x,y)
+                    }
+                }
+                for(let y=-500; y<=500; y+=100) {
+                    for(let x=-3; x<=3; x++) {
+                        this.modiDot(x,y)
+                    }
+                }
+            }
+            drawSin() {
+                for(let angle=-250; angle<=250; angle+=0.1) {
+                    let ladian = this.angleMulti * angle * (Math.PI/180);
+                    let sinValue = this.totalMulti * Math.sin(ladian);
+                    // this.modiDot(angle, 1);
+                    // console.log(ladian)
+                    this.pen.fillStyle = 'skyblue'
+                    this.modiDot(angle, sinValue*100);
+                }
+            }
+            drawCos() {
+                for(let angle=-250; angle<=250; angle+=0.1) {
+                    let ladian = this.angleMulti * angle * (Math.PI/180);
+                    let cosValue = this.totalMulti * Math.cos(ladian);
+                    // this.modiDot(angle, 1);
+                    // console.log(ladian)
+                    this.pen.fillStyle = 'orange'
+                    this.modiDot(cosValue*100, angle);
+                }
+            }
+            drawTan() {
+                for(let angle=-250; angle<=250; angle+=0.1) {
+                    let ladian = this.angleMulti * angle * (Math.PI/180);
+                    let tanValue = this.totalMulti * Math.tan(ladian);
+                    // this.modiDot(angle, 1);
+                    // console.log(ladian)
+                    this.pen.fillStyle = 'green'
+                    this.modiDot(angle, tanValue*100);
+                }
+            }
+            event() {
+                addEventListener('click', e=>{
+                    switch(e.target.id) {
+                        case "btn":
+                            this.angleMulti = Number(document.getElementById('angleMulti').value);
+                            this.totalMulti = Number(document.getElementById('totalMulti').value);
+                            this.sel = document.getElementById('sel').value;
+                            console.log(this.angleMulti, this.totalMulti, this.sel);
+                            switch(this.sel) {
+                                case "sin":
+                                    // alert(1)
+                                    this.drawSin();
+                                    break;
+                                case "cos":
+                                    this.drawCos();
+                                    break;
+                                case "tan":
+                                    this.drawTan();
+                                    break;
+                            }
+                            break;
+                    }
+                })
+            }
+            running() {
+                this.printCross();
+                this.printUnit();
+                this.event();
+            }
+        }
+
+        const super1 = new Super('super1');
+        super1.running();
+
+   </script>
+</body>
+</html>

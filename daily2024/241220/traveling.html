@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Traveling {
+            constructor(id) {
+                this.id = id;
+                this.arr = [];
+            }
+            flattening(arr) {
+                if (typeof arr == "object") {
+                    for (let key in arr) {
+                        if (typeof arr[key] == "object") {
+                            if (Array.isArray(arr[key])) {
+                                arr[key].forEach(v => {
+                                    console.log(v)
+                                    this.flattening(v);
+                                })
+                            } else {
+                                for (let item in arr[key]) {
+                                    this.flattening(arr[key][item])
+                                }
+                            }
+                        } else {
+                            this.arr.push(arr[key])
+                        }
+                    }
+                } else { this.arr.push(arr) };
+            }
+            displaying() {
+                console.log(this.arr)
+                this.arr.forEach(v => {
+                    document.write(v + "<br>")
+                })
+            }
+            running(arr) {
+                this.flattening(arr);
+                this.displaying();
+            }
+        }
+
+        const traveling = new Traveling('traveling');
+        const myZard = {
+            name: "Zard",
+            age: 21,
+            job: 'singer',
+            album: [
+                "A1",
+                "A2",
+                "A3"
+            ],
+            hitSong: {
+                title: "HOHO",
+                song: "HAHA"
+            },
+            sing: () => {
+                document.write('LALALALALALL');
+            }
+        }
+        traveling.running(myZard);
+
+    </script>
+
+
+
+</body>
+
+</html>

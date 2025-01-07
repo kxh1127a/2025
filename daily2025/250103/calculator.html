@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #D1E7F4;
+        }
+
+        .fullBody {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid black;
+            background-color: rgba(150, 150, 114, 0.5);
+        }
+
+        .calcArea {
+            width: 160px;
+            height: 30px;
+            /* border: 1px solid black; */
+            background-color: lightgray;
+        }
+        .unit {
+            width: 30px;
+            height: 30px;
+            /* border: 1px solid black; */
+            display: inline-block;
+            margin: 3px;
+            background-color: rgb(222, 231, 235);
+            line-height: 30px;
+            text-align: center;
+        }
+
+        .canvas {
+            border: 1px solid black;
+            margin: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="fullBody">
+        <div class="calcArea"></div>
+        <div class="unitArea">
+            <div>
+                <div class="unit">√</div>
+                <div class="unit">(</div>
+                <div class="unit">)</div>
+                <div class="unit">◀</div>
+            </div>
+            <div>
+                <div class="unit">7</div>
+                <div class="unit">8</div>
+                <div class="unit">9</div>
+                <div class="unit">/</div>
+            </div>
+            <div>
+                <div class="unit">4</div>
+                <div class="unit">5</div>
+                <div class="unit">6</div>
+                <div class="unit">x</div>
+            </div>
+            <div>
+                <div class="unit">1</div>
+                <div class="unit">2</div>
+                <div class="unit">3</div>
+                <div class="unit">-</div>
+            </div>
+            <div>
+                <div class="unit">0</div>
+                <div class="unit">.</div>
+                <div class="unit">=</div>
+                <div class="unit">+</div>
+            </div>
+        </div>
+    </div>
+    <canvas id="canvas" class="canvas" width="200" height="200"></canvas>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dotCollection</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div><canvas id="canvas" class="canvas" width="500" height="500"></canvas></div>
+    <script>
+        class DotCollect {
+            constructor(id) {
+                this.id = id;
+                this.canvas = document.getElementById('canvas');
+                this.pen = canvas.getContext('2d');
+                this.scaleFactor = 10;
+            }
+            printDot(x, y) {
+                this.pen.fillRect((this.canvas.height/2) + x * this.scaleFactor, (this.canvas.width/2) - y * this.scaleFactor, 1, 1);
+            }
+            setUnit() {
+                this.printDot(0, 0)
+                for (let i = -50; i <= 50; i += 0.1) {
+                    this.printDot(0, i);
+                    this.printDot(i, 0);
+                }
+                for (let i = -25; i <= 25; i += 1) {
+                    for (let j = -0.2; j <= 0.2; j += 0.1) {
+                        this.printDot(i, j);
+                        this.printDot(j, i)
+                    }
+                }
+            }
+            drawDot(item) {
+                item.forEach(v => {
+                    this.pen.fillStyle = 'orange'
+                    this.printDot(v['x'], v['y'])
+                })
+            }
+            drawLine(item) {
+                for (let i = 0; i < item.length; i += 2) {
+                    // console.log(item[i])
+                    //{x: -9, y: -10}
+                    let x1 = item[i]['x'];
+                    let y1 = item[i]['y'];
+                    let x2 = item[i + 1]['x'];
+                    let y2 = item[i + 1]['y'];
+                    this.printDot(x1, y1)
+                    this.printDot(x2, y2)
+                    let a = (y1 - y2) / (x1 - x2);
+                    let b = y1 - (a * x1);
+                    if (x1 > x2) {
+                        for (let x = x2; x < x1; x += 0.01) {
+                            this.printDot(x, (a * x) + b)
+                        }
+                    } else if (x1 < x2) {
+                        for (let x = x1; x < x2; x += 0.01) {
+                            this.printDot(x, (a * x) + b)
+                        }
+                    } else {
+                        if (y1 > y2) {
+                            for (let y = y2; y <= y1; y = y + 0.01) {
+                                this.printDot(x1, y);
+                            }
+                        } else {
+                            for (let y = y1; y <= y2; y = y + 0.01) {
+                                this.printDot(x1, y);
+                            }
+                        }
+                    }
+                }
+            }
+            drawTriangle(item) {
+                let sendArr = [];
+                for (let i = 0; i < item.length; i++) {
+                    // console.log(item[0])
+                    if ((i + 1) % 3 == 0) {
+                        sendArr.push({ x: item[i]['x'], y: item[i]['y'] });
+                        sendArr.push({ x: item[i - 2]['x'], y: item[i - 2]['y'] });
+                    } else {
+                        sendArr.push({ x: item[i]['x'], y: item[i]['y'] });
+                        sendArr.push({ x: item[i + 1]['x'], y: item[i + 1]['y'] });
+                    }
+                }
+                this.pen.fillStyle = 'red';
+                // console.log(sendArr)
+                this.drawLine(sendArr)
+            }
+            drawRectangle(item) {
+                let sendArr = [];
+                for (let i = 0; i < item.length; i++) {
+                    // console.log(item[0])
+                    if ((i + 1) % 4 == 0) {
+                        sendArr.push({ x: item[i]['x'], y: item[i]['y'] });
+                        sendArr.push({ x: item[i - 3]['x'], y: item[i - 3]['y'] });
+                    } else {
+                        sendArr.push({ x: item[i]['x'], y: item[i]['y'] });
+                        sendArr.push({ x: item[i + 1]['x'], y: item[i + 1]['y'] });
+                    }
+                }
+                this.pen.fillStyle = 'blue';
+                console.log(sendArr)
+                this.drawLine(sendArr)
+                console.log(this.canvas.height)
+            }
+            drawCircle(item) {
+                for (let i = 0; i < item.length; i++) {
+                    // console.log(item[i]['r']);
+                    let r = Math.sqrt(item[i]['r']);
+                    let a = item[i]['a'];
+                    let b = item[i]['b'];
+                    for(let i=-180; i<=180; i++) {
+                        let radian = i * (Math.PI/180);
+                        let sin = Math.sin(radian) * r;
+                        let cos = Math.cos(radian) * r;
+                        this.pen.fillStyle = 'green';
+                        this.printDot(cos+a, sin+b);
+                    }
+                }
+            }
+            running(obj) {
+                this.setUnit();
+                this.drawDot(obj[0]['dot']);
+                this.drawLine(obj[1]['line']);
+                this.drawTriangle(obj[2]['triangle']);
+                this.drawRectangle(obj[3]['rectangle']);
+                this.drawCircle(obj[4]['circle']);
+            }
+        }
+
+
+        const dotCollection = [
+            {
+                dot: [
+                    { x: -20, y: 15 },
+                    { x: -15, y: 10 }
+                ]
+            },
+            {
+                line: [
+                    { x: -9, y: -10 },
+                    { x: 12, y: -15 },
+                    { x: 4, y: -5 },
+                    { x: -5, y: -10 },
+                    { x: -14, y: -14 },
+                    { x: -10, y: 10 }
+                ]
+            },
+            {
+                triangle: [
+                    { x: 5, y: 8 },
+                    { x: -8, y: 0 },
+                    { x: 10, y: -10 },
+                    { x: 1, y: 1 },
+                    { x: 0, y: 0 },
+                    { x: 2, y: -2 },
+                    { x: -5, y: -8 },
+                    { x: 9, y: 7 },
+                    { x: -11, y: 5 }
+                ]
+            },
+            {
+                rectangle: [
+                    { x: 15, y: 8 },
+                    { x: -8, y: 0 },
+                    { x: -10, y: -10 },
+                    { x: 10, y: -9 },
+                    { x: 20, y: 20 },
+                    { x: -20, y: 20 },
+                    { x: -20, y: -20 },
+                    { x: 20, y: -20 }
+                ]
+            },
+            {
+                circle: [
+                    { r: 9, a: -8, b: 10 },
+                    { r: 49, a: 7, b: 7 }
+                ]
+            }
+        ]
+        const main = (() => {
+            const dotCollect = new DotCollect('dotCollect');
+            dotCollect.running(dotCollection);
+        })();
+
+    </script>
+</body>
+
+</html>

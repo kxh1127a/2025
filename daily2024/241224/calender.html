@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="totalArea"></div>
+
+    <script>
+        class Calender {
+            constructor(id) {
+                this.id = id;
+                this.year = 0;
+                this.month = 0;
+            }
+            setHtml() {
+                // alert(11);
+                const htmlString = `
+                    <input id="inputYear" class="inputYear" type="text">년도
+                    <select id="inputMonth" class="inputMonth">
+                        <option value="0" selected>1월</option>
+                        <option value="1">2월</option>
+                        <option value="2">3월</option>
+                        <option value="3">4월</option>
+                        <option value="4">5월</option>
+                        <option value="5">6월</option>
+                        <option value="6">7월</option>
+                        <option value="7">8월</option>
+                        <option value="8">9월</option>
+                        <option value="9">10월</option>
+                        <option value="10">11월</option>
+                        <option value="11">12월</option>
+                    </select>
+                    <button id="outputBtn" class="outputBtn">달력보기</button>
+                    <div id="outputArea" class="outputArea"></div>
+                `;
+                const cssString = `
+                    <style>
+                        .inputYear {
+                            width: 100px;
+                            height: 40px;
+                            font-size: 20px;
+                        }
+                        .inputMonth {
+                            width: 80px;
+                            height: 40px;
+                            font-size: 20px;
+                        }
+                        .outputBtn {
+                            width: 60px;
+                            height: 30px;
+                            background-color: green;
+                            color: white;
+                            border: 0px;
+                            border-radius: 5px;
+                        }
+                        .outputArea {
+                            width: 700px;
+                            /* border: 1px solid black; */
+                        }
+                        [class^="day"] {
+                            width: 100px;
+                            height: 100px;
+                            border: 1px solid black;
+                            display: inline-block;
+                            float: left;
+                        }
+                    </style>
+                `;
+                document.getElementById('totalArea').innerHTML = htmlString + cssString;
+            }
+            getValue() {
+                const yoilInfo = ["일", "월", "화", "수", "목", "금", "토"];
+                addEventListener('click', (e) => {
+                    switch (e.target.id) {
+                        case "inputYear":
+                            document.getElementById('inputYear').style.backgroundColor = "orange";
+                            break;
+                        case "inputMonth":
+                            document.getElementById('inputMonth').style.backgroundColor = "orange";
+                            break;
+                        case "outputBtn":
+                            document.getElementById('outputArea').innerHTML = '';
+                            this.year = Number(document.getElementById('inputYear').value);
+                            this.month = Number(document.getElementById('inputMonth').value);
+                            // alert(this.month);
+                            for (let i = 0; i < yoilInfo.length; i++) {
+                                document.getElementById('outputArea').innerHTML += `
+                                    <div class="day">${yoilInfo[i]}</div>
+                                `;
+                            }
+                            this.getInfo();
+                            break;
+                    }
+                })
+            }
+            getInfo() {
+                const getFirst = new GetDateInfo('getFirst');
+                getFirst.getFirstDate(this.year, this.month);
+                // alert(getFirst.totalInfo);
+                // const totalInfo = new Date(this.year, this.month);
+                // const firstDay = totalInfo.getDay();
+                // alert(firstDay);
+
+                const getLast = new GetDateInfo('getLast');
+                getLast.getLastDay(this.year, (this.month + 1), 0);
+                // alert(getLast.selectedInfo);
+                // const selectedInfo = new Date(this.year, (this.month + 1), 0);
+                // const lastDate = selectedInfo.getDate();
+                const totalDiv = getFirst.totalInfo + getLast.selectedInfo;
+                const createDiv = 7 - (totalDiv % 7);
+                // alert(createDiv)
+                // alert(totalDiv)
+                // alert(dayInfo);
+                // alert(lastDate);
+                const inputString = `
+                    <div class="day"></div>
+                `;
+                //앞 빈칸
+                for (let i = 0; i < getFirst.totalInfo; i++) {
+                    document.getElementById('outputArea').innerHTML += inputString;
+                }
+                //1~lastdate
+                for (let i = 1; i <= getLast.selectedInfo; i++) {
+                    document.getElementById('outputArea').innerHTML += `
+                        <div class="day${i}">${i}</div>
+                    `;
+                }
+                //뒤 빈칸
+                if (createDiv < 7) {
+                    for (let i = 0; i < createDiv; i++) {
+                        document.getElementById('outputArea').innerHTML += inputString;
+                    }
+                }
+            }
+            running() {
+                this.setHtml();
+                this.getValue();
+                // this.getInfo();
+            }
+        }
+
+        class GetDateInfo {
+            constructor(id) {
+                this.id = id;
+                this.totalInfo = 0;
+                this.selectedInfo = 0;
+            }
+            getFirstDate(year, month) {
+                const dateData = new Date(year, month);
+                this.totalInfo = dateData.getDay();
+                // return this.totalInfo;
+            }
+            getLastDay(year, month, date) {
+                const selectedDataInfo = new Date(year, month, date);
+                this.selectedInfo = selectedDataInfo.getDate();
+            }
+        }
+
+        const calender = new Calender('calender');
+        calender.running();
+    </script>
+</body>
+
+</html>

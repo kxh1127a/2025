@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const myS = "I LOVE ZARD!";
+        let myIterator = myS[Symbol.iterator]();
+        let iteratorElement = myIterator.next();
+
+        console.log(iteratorElement.done)
+        while(!iteratorElement.done) {
+            document.write(iteratorElement.value +"<br>");
+            iteratorElement = myIterator.next();
+        }
+    </script>
+</body>
+</html>

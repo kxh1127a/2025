@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>merge sort</title>
+</head>
+
+<body>
+    <script>
+        const data = [[38, 27, 43, 3, 9, 82, 10, 11]];
+        const copyData = data.map(v => [...v]);
+        let resultData = []; 
+
+        while(copyData[0].length > 0) {
+            tempData = [];
+            for(let i=0; i<2; i++) {
+                tempData.push(data[0].shift);
+            }
+            resultData.push(tempData);
+        }
+    </script>
+    
+    
+
+</body>
+
+</html>

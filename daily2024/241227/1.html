@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>unit</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        input {
+            margin: 20px;
+        }
+
+        .canvas {
+            border:1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div>
+            <input id="value" type="text">
+            <select name="unit" id="unit">
+                <option value="selectDegree">각도</option>
+                <option value="selectRadian">라디안</option>
+                <option value="selectMil">밀</op안ion>
+
+            </select>
+
+            <button id="btn">변환</button>
+        </div>
+        <div>각도<input id="degree" type="text"></div>
+        <div>라디안<input id="radian" type="text"></div>
+        <div>밀<input id="mil" type="text"></div>
+        <canvas id="canvas" class="canvas" width="500" height="500"></canvas>
+    </div>
+    <p id="outputArea"></p>
+    <script>
+        class ChangeUnit {
+            constructor(id) {
+                this.id = id;
+                this.degreeValue = 0;
+                this.radianValue = 0;
+            }
+            getValue() {
+                document.getElementById('btn').addEventListener('click', e => {
+                    document.getElementById('outputArea').innerHTML = '';
+                    this.degreeValue = Number(document.getElementById('value').value);
+                    document.getElementById('degree').value = this.degreeValue;
+                    this.radianValue = this.degreeValue * (Math.PI / 180);
+                    document.getElementById('radian').value = this.degreeValue; 
+                    document.getElementById('mil').value = this.degreeValue * (6400/360)
+                })
+            }
+            canvas() {
+                const canvas = document.getElementById('canvas');
+                const pen = canvas.getContext('2d');
+                const printDot=(x, y)=>{
+                    pen.fillRect(250+x, 250-y, 1, 1);
+                }
+                const printCross = (()=>{
+                    for(let i=-250; i<=250; i++) {
+                        printDot(0,i);
+                        printDot(i,0);
+                    }
+                })();
+
+
+                let cos = Math.cos()
+            }
+            running() {
+                this.getValue();
+                this.canvas();
+            }
+        }
+
+        const changeUnit = new ChangeUnit('changeUnit');
+        changeUnit.running();
+    </script>
+    </body도 </html>

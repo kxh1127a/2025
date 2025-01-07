@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // const myA = [7, 8, 10, 100, 99, 44, 23, 40, 14, 80];
+        // let tempV = 0;
+        // for (let i = 0; i < myA.length; i++) {
+        //     tempV += myA[i]
+        // }
+        // const avr = tempV / (myA.length);
+        // document.write(`평균:${avr}`)
+        // for (let i = 0; i < myA.length; i++) {
+        //     if (myA[i] > avr) {
+        //         document.write(myA[i] + "<br>")
+        //     }
+        // }
+
+        class GetNumber {
+            constructor(id) {
+                this.id = id;
+                this.avg = 0;
+                this.resultArr = [];
+            }
+            getAvr(arr) {
+                let tempValue = 0;
+                arr.forEach(v => {
+                    tempValue += v;
+                })
+                this.avg = tempValue / (arr.length);
+                document.write(`평균:${this.avg}<br>`);
+            }
+            printNum(arr) {
+                this.resultArr = arr.filter(v => {
+                    return v>this.avg
+                })
+                this.resultArr.sort((a,b)=>a-b);
+                this.resultArr.forEach(v=>{
+                    document.write(v+"<br>");
+                })
+            }
+            control(arr) {
+                this.getAvr(arr);
+                this.printNum(arr);
+            }
+        }
+        const getNumber = new GetNumber('getNumber');
+        const myA = [2, 7, 8, 10, 88, 100, 99, 44, 23, 40, 14, 80];
+        getNumber.control(myA);
+
+    </script>
+</body>
+
+</html>

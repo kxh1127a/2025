@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class jinbup {
+            constructor(id) {
+                this.id = id;
+                this.inputNum = 0;
+                this.inputNumLength = 0;
+            }
+            getNumber() {
+                this.inputNum = prompt('숫자?');
+                this.inputNumLength = this.inputNum.length;
+                // document.write(this.inputNumLength);
+            }
+            iterator() {
+                const iter = this.inputNum[Symbol.iterator]();
+                let iterResult = iter.next();
+                for(let i=0; i<this.inputNumLength; i++){
+                    document.write(`${iterResult.value} <br>`)
+                    iterResult = iter.next();
+                }
+                
+                //
+            }
+            run() {
+                this.getNumber();
+                this.iterator();
+
+            }
+        }
+
+        const jin = new jinbup('jin');
+        jin.run();
+    </script>
+</body>
+
+</html>

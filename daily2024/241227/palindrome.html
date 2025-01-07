@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>palindrome</title>
+</head>
+<body>
+    <div><input id="inputText" type="text"><button id="checkBtn">palindrome check</button></div>
+    <div id="outputArea"></div>
+    <script>
+        class Palindrome {
+            constructor(id) {
+                this.id = id;
+                this.string = '';
+            }
+            getData() {
+                addEventListener('click', e=>{
+                    switch(e.target.id){
+                        case "checkBtn":
+                            this.string = document.getElementById('inputText').value;
+                            this.checkData();
+                            break;
+                    }
+                })
+            }
+            checkData() {
+                let reverseString = '';
+                const iterator = this.string[Symbol.iterator]();
+                let iteratorResult = iterator.next();
+                for(let i=0; i<this.string.length; i++) {
+                    reverseString = iteratorResult.value + reverseString;
+                    iteratorResult = iterator.next();
+                }
+                // console.log(reverseString);
+                const checking = (() => {
+                    if(this.string === reverseString){
+                        this.printResult(true);
+                    }
+                    else { this.printResult(false); }
+                })();
+            }
+            printResult(isPalindrome) {
+                if(isPalindrome) {
+                    document.getElementById('outputArea').innerHTML = 'Palindrome⭕'
+                } else {
+                    document.getElementById('outputArea').innerHTML = 'Palindrome❌'
+                }
+            }
+            running() {
+                this.getData();
+            }
+        }
+
+        const main = (() => {
+            const palindrome = new Palindrome('palindrome');
+            palindrome.running();
+        })();
+    </script>
+</body>
+</html>

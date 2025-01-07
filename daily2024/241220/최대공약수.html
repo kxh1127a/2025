@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <p><input id="valueA" type="number"></p>
+        <p><input id="valueB" type="number"></p>
+        <p><button id="resultBtn">최대공약수</button></p>
+        <div id="resultArea"></div>
+    </div>
+    <script>
+        class Numbers {
+            constructor(id) {
+                this.id = id;
+                this.valueA = 0;
+                this.valueB = 0;
+                this.arr = [];
+            }
+            getValue() {
+                this.valueA = document.getElementById('valueA').value;
+                this.valueB = document.getElementById('valueB').value;
+            }
+            calc() {
+                for(let i=1; i<=this.valueA; i++) {
+                    if(this.valueA % i == 0) {
+                        if(this.valueB % i ==0) {
+                            this.arr.unshift(i)
+                        }
+                    }
+                }
+                document.getElementById('resultArea').innerHTML = this.arr[0];
+            }
+            eventControl() {
+                window.addEventListener('click', (e)=>{
+                    switch(e.target.id) {
+                        case "resultBtn": 
+                            this.getValue();
+                            this.calc();
+                            break;
+                    }
+                })
+            }
+            running() {
+                this.eventControl();
+            }
+        }
+
+        const numbers = new Numbers('numbers');
+        numbers.running();
+    </script>
+</body>
+</html>

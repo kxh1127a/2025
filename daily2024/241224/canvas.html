@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="area"></div>
+
+    <script>
+        class Canvas {
+            constructor(id) {
+                this.canvas = null;
+                this.pen = null;
+                this.canvasWidth = 800;
+                this.canvasHeight = 800;
+                this.x1 = 0;
+                this.y1 = 0;
+                this.x2 = 0;
+                this.y2 = 0;
+                this.scaleFactor = 25;
+            }
+            init() {
+                console.log(this.canvasHeight, this.canvasWidth)
+                document.getElementById('area').innerHTML = '';
+                const htmlString = `
+                <section>
+                    <p><button>▲</button></p>
+                    <div class="center"><button>◀</button><button>◎</button><button>▶</button></div>
+                    <p><button>▼</button></p>
+                </section>
+                <canvas id="canvas" class="canvas" width="${this.canvasWidth}" height="${this.canvasHeight}"></canvas>
+                <div>
+                    A <input id="x1" type="number" placeholder="x">
+                    <input id="y1" type="number" placeholder="y">
+                </div>
+                <div>
+                    B <input id="x2" type="number" placeholder="x">
+                    <input id="y2" type="number" placeholder="y">
+                </div>
+                <div>
+                    Canvas <input id="wid" type="number" placeholder="가로">
+                    <input id="hei" type="number" placeholder="세로">
+                </div>
+                <div>
+                    Scale Factor <input id="scale" type="number" placeholder="숫자">
+                </div>
+                <button id="printBtn">출력</button>
+                `;
+                const cssString = `
+                <style>
+                    section {
+                        position: absolute;
+                        left : 30px;
+                        top: 30px;
+                    }
+
+                    section p button {
+                        width : 90px;
+                        height: 30px;
+                        border-radius: 0;
+                        background-color: lightgray;
+                    }
+                    
+                    section p button:hover {
+                        background-color: gray;
+                    }
+                    
+                    .center {
+                        margin: 0;
+                    }
+                    .center button{
+                        width: 30px;
+                        height: 30px;
+                        margin: 0;
+                        border-radius: 0;
+                        background-color: lightgray;
+                        font-size: 28px;
+                    }
+                    .center button:hover {
+                        background-color: gray;
+                    }
+                    .canvas {
+                        border: 1px solid black;
+                        margin: 10px;
+                    }
+
+                    div {
+                        margin: 10px;
+                    }
+
+                    input {
+                        width: 50px;
+                        height: 40px;
+                        font-size: 15px;
+                        margin: 10px;
+                    }
+
+                    button {
+                        width: 200px;
+                        height: 50px;
+                        font-size: 20px;
+                        background-color: skyblue;
+                        border: 0px;
+                        border-radius: 20px;
+                        color: white;
+                    }
+
+                    button:hover {
+                        cursor: pointer;
+                        background-color: navy;
+                    }
+                </style>
+                `;
+                document.getElementById('area').innerHTML = htmlString + cssString;
+                this.canvas = document.getElementById('canvas');
+                this.pen = this.canvas.getContext('2d');
+            }
+            getInput() {
+                addEventListener('click', (e) => {
+                    switch (e.target.id) {
+                        case "printBtn":
+                            this.x1 = Number(document.getElementById('x1').value);
+                            this.y1 = Number(document.getElementById('y1').value);
+                            this.x2 = Number(document.getElementById('x2').value);
+                            this.y2 = Number(document.getElementById('y2').value);
+
+                            if (document.getElementById('hei').value) {
+                                this.canvasHeight = document.getElementById('hei').value;
+                            }
+                            if (document.getElementById('wid').value) {
+                                this.canvasWidth = document.getElementById('wid').value;
+                            }
+                            if (document.getElementById('scale').value) {
+                                this.scaleFactor = Number(document.getElementById('scale').value) || this.scaleFactor;
+                            }
+                            this.init();
+                            this.printCross();
+                            this.printUnit();
+                            this.firstGraph(this.x1, this.y1, this.x2, this.y2);
+                            break;
+                    }
+                })
+            }
+            printDot(x, y) {
+                const canvas = document.getElementById('canvas');
+                const pen = canvas.getContext('2d');
+                pen.fillRect((this.canvasWidth / 2) + x, (this.canvasHeight / 2) - y, 1, 1)
+            }
+            printText(text, x, y) {
+                this.pen.fillText(text, (this.canvasWidth / 2) + x, (this.canvasHeight / 2) - y)
+            }
+            modiDot(x, y) {
+                const canvas = document.getElementById('canvas');
+                const pen = canvas.getContext('2d');
+                pen.fillRect((this.canvasWidth / 2) + x * this.scaleFactor, (this.canvasHeight / 2) - y * this.scaleFactor, 1, 1)
+            }
+            printCross() {
+                for (let i = -(this.canvasHeight / 2); i <= (this.canvasHeight / 2); i++) {
+                    this.printDot(0, i)
+                }
+                for (let i = -(this.canvasWidth / 2); i <= (this.canvasWidth / 2); i++) {
+                    this.printDot(i, 0)
+                }
+            }
+            printUnit() {
+                for (let x = 0; x <= (this.canvasWidth / 2); x += this.scaleFactor) {
+                    for (let y = -3; y <= 3; y++) {
+                        this.printDot(x, y);
+                    }
+                }
+                for (let x = 0; x <= (this.canvasWidth / 2); x += this.scaleFactor) {
+                    this.printText(x / this.scaleFactor, x, -20); 
+                }
+                for (let x = 0; x >= -(this.canvasWidth / 2); x -= this.scaleFactor) {
+                    for (let y = -3; y <= 3; y++) {
+                        this.printDot(x, y);
+                    }
+                }
+                for (let x = 0; x >= -(this.canvasWidth / 2); x -= this.scaleFactor) {
+                    if (x != 0) { this.printText(x / this.scaleFactor, x, -20); }
+                }
+                for (let y = 0; y <= (this.canvasHeight / 2); y += this.scaleFactor) {
+                    for (let x = -3; x <= 3; x++) {
+                        this.printDot(x, y);
+                    }
+                }
+                for (let y = 0; y <= (this.canvasHeight / 2); y += this.scaleFactor) {
+                    if (y != 0) { this.printText(y / this.scaleFactor, 10, y); }
+                }
+                for (let y = 0; y >= -(this.canvasHeight / 2); y -= this.scaleFactor) {
+                    for (let x = -3; x <= 3; x++) {
+                        this.printDot(x, y);
+                    }
+                }
+                for (let y = 0; y >= -(this.canvasHeight / 2); y -= this.scaleFactor) {
+                    if (y != 0) { this.printText(y / this.scaleFactor, 10, y); }
+                }
+            }
+            firstGraph(x1, y1, x2, y2) {
+                x1 *= this.scaleFactor;
+                x2 *= this.scaleFactor;
+                y1 *= this.scaleFactor;
+                y2 *= this.scaleFactor;
+
+                if (x1 < x2) {
+                    const a = (y1 - y2) / (x1 - x2);
+                    const b = y2 - (a * x2);
+
+                    for (let x = x1; x <= x2; x += 1) {
+                        const y = (a * x) + b;
+                        this.modiDot(x / this.scaleFactor, y / this.scaleFactor);
+                    }
+                } else {
+                    const a = (y1 - y2) / (x1 - x2);
+                    const b = y2 - (a * x2);
+
+                    for (let x = x2; x <= x1; x += 1) {
+                        const y = (a * x) + b;
+                        this.modiDot(x / this.scaleFactor, y / this.scaleFactor);
+                    }
+                }
+            }
+            running() {
+                this.init();
+                this.printCross();
+                this.printUnit();
+                this.getInput();
+                // this.firstGraph(50,50,90,90);
+            }
+        }
+        const main = (() => {
+            const canvas = new Canvas('canvas');
+            canvas.running();
+        })();
+
+    </script>
+</body>
+
+</html>

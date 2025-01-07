@@ -1,0 +1,116 @@
+ $colorR : #EA4335;
+ $colorB : #4285F4;
+ $colorY : #FBBC05;
+ $colorG : #34A853;
+ 
+ * {
+     padding: 0;
+     margin: 0;
+     font: {
+        family: "Montserrat", serif;
+        optical-sizing: auto;
+        weight: 600;
+        style: normal;
+     }
+ }
+
+ body, html {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .fullBox {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 75px;
+  
+    .headBox {
+        display: flex;
+        justify-content: center;
+
+        .w1 {
+            color: $colorB;
+            font-size: 100px;
+            margin-top: -7%;
+        }
+        .w2 {
+            color: $colorR
+        }
+        .w3 {
+            color: $colorY
+        }
+        .w4 {
+            color: $colorB;
+        }
+        .w5 {
+            color: $colorG;
+        }
+        .w6 {
+            color: $colorR;
+        }
+    }
+
+    .midBox {
+        width: 100%;
+
+        .midmidBox {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            
+            .search {
+                width: 30%;
+                height: 5vh;
+                border: 1px solid lightgray;
+                border-radius: 30px;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 5px;
+                margin: 1% 0;    
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 20px;
+            
+                div {
+                    display: flex;
+                    align-items: center;
+                    
+                    i {
+                        font-size: 25px;
+                        color: gray;
+                        margin: 0 5px;
+                    }
+                }
+                
+            }
+
+
+        }
+    }
+
+    .footBox {
+        width: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        button {
+            background-color: rgb(248, 247, 247);
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 400;
+            height: 1%;
+            padding: 1%;
+            margin: 3%;
+        }
+    }
+
+
+ }
