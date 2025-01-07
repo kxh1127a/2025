@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapcha</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .canvas {
+            margin-top: 20px;
+        }
+
+        input {
+            margin-top: 10px;
+            margin-bottom: 60px;
+            height: 30px;
+        }
+
+        .numPad {
+            /* border: 1px solid black; */
+            width: 300px;
+            height: 400px;
+        }
+
+        .nums {
+            width: 100px;
+            height: 100px;
+            border: 1px solid lightblue;
+            display: inline-block;
+            float: left;
+            text-align: center;
+            line-height: 100px;
+            font-size: 45px;
+            cursor: pointer;
+            color: rgb(129, 129, 129);
+            transition: 0.2s;
+        }
+
+        .nums:hover {
+            font-size: 55px;
+            color: rgba(48, 48, 48, 0.705);
+            font-weight: 900;
+            border: 4px solid lightskyblue;
+            line-height: 100px;
+        }
+        
+        button {
+            background-color:skyblue;
+            width: 80px;
+            height: 30px;
+            margin-top: 10px;
+            color: white;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+
+        }
+
+
+        #outputArea {
+            margin-top: 40px;
+            font-size: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mainBox">
+        <div>
+            <canvas id="canvas" width="250" height="250"></canvas>
+        </div>
+        <p>화면에 보이는 숫자를 입력해주세요.</p>
+        <p><input id="inputValue" type="text">
+            <button id="btn">확인</button>
+            <button id="clearBtn">지우기</button>
+        </p>
+        <div id="numPad" class="numPad">
+            <!-- <div class="nums"></div>
+        <div class="nums"></div>
+        <div class="nums"></div>
+        <div class="nums"></div>
+        <div class="nums"></div>
+        <div class="nums"></div>
+        <div class="nums"></div>
+        <div class="nums"></div>
+        <div class="nums"></div> -->
+        </div>
+        <button id="refresh">새로고침</button>
+        <div id="outputArea"></div>
+    </div>
+
+    <script>
+        class Queue {
+            constructor(id) {
+                this.id = id;
+                this.storage = [];
+            }
+            shiftItem() {
+                return this.storage.shift();
+            }
+            pushItem(item) {
+                this.storage.push(item);
+            }
+        }
+
+        class CaptChar {
+            constructor(id) {
+                this.id = id;
+                this.canvas = document.getElementById('canvas');
+                this.pen = this.canvas.getContext('2d');
+                this.captChar = '';
+                this.nums = new Queue('nums');
+                this.inputString = '';
+            }
+            fillCaptChar() {
+                for (let i = 0; i < 4; i++) {
+                    this.captChar += Math.ceil(Math.random() * 10) - 1;
+                }
+                this.pen.font = "30px Comic Sans MS";
+                this.pen.fillStyle = "skyblue";
+                this.pen.textAlign = "center";
+                this.pen.fillText(this.captChar, canvas.width / 2, canvas.height / 2)
+            }
+            numPadSetting() {
+                let htmlString = '';
+                for (let i = 0; i <= 9; i++) {
+                    this.nums.pushItem(i);
+                }
+                console.log(this.nums.storage)
+                for (let i = 0; i <= 9; i++) {
+                    const randomValue = Math.floor(Math.random() * (this.nums.storage.length + 1)) + 1;
+                    console.log(randomValue)
+                    for (let i = 0; i < randomValue; i++) {
+                        this.nums.pushItem(this.nums.shiftItem());
+                        // console.log(this.nums.storage)
+                    }
+                    let newItem = this.nums.shiftItem();
+                    htmlString += `
+                        <div id="nums" class="nums">${newItem}</div>
+                    `;
+                }
+                document.getElementById('numPad').innerHTML = htmlString;
+            }
+            event() {
+                addEventListener('click', e => {
+                    switch (e.target.id) {
+                        case "btn":
+                            // alert(1)
+                            const inputValue = document.getElementById('inputValue').value
+                            if (inputValue == this.captChar) {
+                                document.getElementById('outputArea').innerHTML = '⭕Accept.사람입니다.';
+                            } else {
+                                document.getElementById('outputArea').innerHTML = '❌Reject.로봇입니다.';
+                            }
+                            break;
+                        case "refresh":
+                            this.numPadSetting();
+                            break;
+                        case "nums":
+                            this.numPadSetting();
+                            this.inputString += e.target.innerHTML;
+                            console.log(this.inputString)
+                            document.getElementById('inputValue').value = this.inputString;
+                            break;
+                        case "clearBtn":
+                            this.inputString = '';
+                            document.getElementById('inputValue').value = this.inputString;
+                            break;
+                    }
+                })
+                addEventListener('input', e => {
+                    switch (e.target.id) {
+                        case "inputValue":
+                            this.inputString = document.getElementById('inputValue').value;
+                            break;
+                    }
+                })
+            }
+            running() {
+                this.fillCaptChar();
+                this.event();
+                this.numPadSetting();
+            }
+        }
+
+        const main = (() => {
+            const captChar = new CaptChar('captChar');
+            captChar.running();
+        })();
+        //asdasdnklasdnasdnk
+
+    </script>
+</body>
+
+</html>

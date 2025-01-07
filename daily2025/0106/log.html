@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" class="canvas" width="500" height="500"></canvas>
+    <canvas id="canvas2" class="canvas" width="500" height="500"></canvas>
+    <script>
+        class Log {
+            constructor(id) {
+                this.id = id;
+                this.canvas = document.getElementById('canvas');
+                this.pen = this.canvas.getContext('2d');
+            };
+            printDot(x, y) {
+                this.pen.fillRect(250 + x * 50, 250 - y * 50, 1, 1)
+            }
+            printCross() {
+                for (let i = -500; i <= 500; i += 0.01) {
+                    this.printDot(i, 0)
+                    this.printDot(0, i)
+                }
+            }
+            printCalc() {
+                //y=a**x
+                for (let x = -500; x < 500; x += 0.005) {
+                    this.printDot(x, 2 ** x)
+                    this.printDot(x, Math.log2(x))
+                    this.printDot(x, x)
+                }
+            }
+            running() {
+                this.printCross();
+                this.printCalc();
+            }
+        }
+
+        class Log2 {
+            constructor(id) {
+                this.id = id;
+                this.canvas = document.getElementById('canvas2');
+                this.pen = this.canvas.getContext('2d');
+                this.scaleFactor = 50;
+            }
+            printDot(x, y) {
+                this.pen.fillRect(50 + x * this.scaleFactor, 450 - Math.log2(y) * this.scaleFactor, 1, 1);
+            }
+            printCross() {
+                for (let i = -500; i <= 500; i += 0.01) {
+                    this.printDot(i, 1)
+                    this.printDot(0, i)
+                }
+            }
+            printUnit() {
+                //가로cross
+                for (let i=0; i<=100; i++) {
+                    for (let x=0; x<=10; x+=0.1) {
+                        this.printDot(x, 2**i)
+                        // this.pen.fillText("2**i", 50 + x * this.scaleFactor, 450 - Math.log2(2**i) * this.scaleFactor)
+                    }
+                }
+                //세로cross
+                for (let x=0; x<=10; x++) {
+                    for (let y=1; y<=500; y+=0.5) {
+                        this.printDot(x, y)
+                    }
+                }
+
+                //y축 텍스트                
+                for (let i=0; i<=100; i++) {
+                    this.pen.fillText(`2^${i}=${2**i}`, 50 + (-1) * this.scaleFactor, 460 - Math.log2(2**i) * this.scaleFactor)
+                    
+                }
+                //x축 텍스트
+                for (let i=0; i<=10; i++) {
+                    this.pen.fillText(i, 50 + (i-0.1) * this.scaleFactor, 470)
+                }
+
+            }
+            printCalc() {
+                for(let x = 0; x<500; x+=0.001) {
+                    this.printDot(x, (2**x) );
+                    // this.printDot(x, Math.log2(2**x) );
+                    // 0, 1    // 2**1  2  => 1   Math.log2(2)
+                    // 1, 2    // 2**2  4  => 2   Math.log2(4)
+                    //            2**3  8  => 3
+                }
+            }
+            running() {
+                this.printCross();
+                this.printCalc();
+                this.printUnit();
+            }
+        }
+
+        const main = (() => {
+            const log = new Log('log');
+            const log2 = new Log2('log2');
+            log.running();
+            log2.running();
+        })();
+    </script>
+</body>
+</html>
