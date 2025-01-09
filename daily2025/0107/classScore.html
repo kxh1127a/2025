@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class ScoreBoard</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .title {
+            margin: auto;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        
+        button {
+            margin: 30px;
+            cursor: pointer;
+        }
+
+        canvas {
+            border: 1px solid black;
+            display: inline-block;
+        }
+        .canvas {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        h2 {
+            text-align: center;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <section id="total">
+        <div class="title">606호 Node Class Score Board
+            <p><button id="viewBtn">view items</button></p>
+        </div>
+        <div id="canvasArea"></div>
+    </section>
+    <script>
+        class ScoreBoard {
+            constructor(id) {
+                this.id = id;
+            }
+            eventJson() {
+                addEventListener('click', e => {
+                    switch (e.target.id) {
+                        case "viewBtn":
+                            const xhttp = new XMLHttpRequest();
+                            const dataStr = JSON.stringify(jsonData);
+                            const data = JSON.parse(dataStr);
+                            console.log(data.studentList);
+                            // {no: 1, name: 'zard', kor: 80, math: 89, eng: 70}
+                            this.createCanvas(data.studentList);
+
+                            // data.studentList.forEach(v=>{
+                            //     console.log(v)
+                            //     this.createCanvas(v);
+                            // })
+                            // this.createCanvas(data.studentList[0]);
+                            xhttp.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    // const data = JSON.parse(this.responseText);
+                                    console.log(data)
+                                }
+                            }
+                            break;
+                    }
+                })
+            }
+            createCanvas(item) {
+                
+                console.log(item);
+                document.getElementById('canvasArea').innerHTML = '';
+                const htmlString = `
+                    <div class="canvas">
+                        <h2>국어</h2>
+                        <canvas id="canvasKor" width="500" height="500"></canvas>
+                        <h2>수학</h2>
+                        <canvas id="canvasMath" width="500" height="500"></canvas>                   
+                        <h2>영어</h2>
+                        <canvas id="canvasEng" width="500" height="500"></canvas>
+                    </div>
+                `;
+                document.getElementById('canvasArea').innerHTML += htmlString;
+            }
+            running() {
+                this.eventJson();
+            }
+        }
+
+        const main=(()=>{
+            const scoreBoard = new ScoreBoard('scoreBoard');
+            scoreBoard.running();
+        })();
+
+        const jsonData = {
+            "classNumber": "606",
+            "className": "NODEJS",
+            "studentList":
+                [
+                    { "no": 1, "name": "zard", "kor": 80, "math": 89, "eng": 70 },
+                    { "no": 2, "name": "cdr", "kor": 50, "math": 45, "eng": 66 },
+                    { "no": 3, "name": "love", "kor": 88, "math": 65, "eng": 81 },
+                    { "no": 4, "name": "ive", "kor": 69, "math": 55, "eng": 72 },
+                    { "no": 5, "name": "blackpink", "kor": 70, "math": 49, "eng": 65 }
+                ]
+        }
+    </script>
+</body>
+
+</html>

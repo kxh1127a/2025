@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "http://localhost:5000/todos");
+        xhttp.setRequestHeader('Content-type', 'application/json');
+
+        xhttp.send(JSON.stringify({ id: 4, content: 'Angular', completed: true }));
+
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 201) {
+                console.log(this.responseText);
+            }
+        }
+    </script>
+</body>
+</html>
