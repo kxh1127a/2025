@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Graph(Abstract Class v.)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <span id="targetArealogDefault"></span>
+    <span id="targetArealog2"></span>
+    <span id="targetArealog5"></span>
+
+    <script>
+        class AbstractLog {
+            constructor(id) {
+                this.id = id;
+                this.canvas = null;
+                this.pen = null;
+                this.scaleFactor = 50;
+                this.gap = 50;
+                // this.logConstant = logConstant;
+                this.logValue = null;
+                this.canvasHeight = 750;
+                this.canvasWidth = 750;
+            }
+            init() {
+                document.getElementById(`targetArea${this.id}`).innerHTML +=
+                    `
+                <canvas id="canvas${this.id}" class="canvas" width="${this.canvasWidth}" height="${this.canvasHeight}"></canvas>
+                `;
+                this.canvas = document.getElementById(`canvas${this.id}`);
+                this.pen = this.canvas.getContext('2d');
+            }
+            printDot(x, y) {
+                this.logValue = Math.log(y) / Math.log(this.logConstant);
+                this.pen.fillRect(this.gap + x * this.scaleFactor, (this.canvasHeight-this.gap) - this.logValue * this.scaleFactor, 1, 1);
+            }
+            printCross() {
+                for (let i = 0; i <= this.canvasHeight; i += 0.01) {
+                    this.pen.fillRect(i, this.canvasHeight-this.gap, 1, 1);
+                    this.pen.fillRect(this.gap, i, 1, 1);
+                }
+            }
+            printUnit(switcher) {
+                this.pen.fillStyle = 'gray'
+                //가로unit점선
+                for (let y = this.gap; y <= this.canvasHeight; y += 50) {
+                    for (let x = this.gap; x <= this.canvasWidth; x += 3) {
+                        this.pen.fillRect(x, y, 1, 1)
+                    }
+                }
+                // 세로unit점선
+                for (let x = this.gap; x <= this.canvasWidth; x += 50) {
+                    for (let y = 0; y <= this.canvasHeight-this.gap; y += 3) {
+                        this.pen.fillRect(x, y, 1, 1)
+                    }
+                }
+                this.pen.fillStyle = 'black';
+                this.pen.font = '14px sans-serif';
+
+                //x축unit텍스트
+                for (let i = 1; i <= this.canvasWidth; i++) {
+                    this.pen.fillText(i, this.gap + (i - 0.15) * this.scaleFactor, this.canvasHeight-30)
+                }
+            }
+        }
+
+        class LogDefault extends AbstractLog {
+            constructor(id) {
+                super(id);
+                this.canvas = null;
+                this.pen = null;
+                this.scaleFactor = 50;
+            }
+            printUnit() {
+                super.printUnit();
+                for (let i = 1; i <= 100; i++) {
+                    this.pen.fillText(i * this.scaleFactor, this.gap - 0.7 * this.scaleFactor, this.canvasHeight-this.gap+11 - i * this.scaleFactor)
+                }
+            }
+            printCalc() {
+                for (let x = 0; x < this.canvasWidth; x += 0.01) {
+                    this.pen.fillRect(this.gap + x * this.scaleFactor, (this.canvasHeight-this.gap) - (2 ** x), 1, 1);
+                    // console.log(x)
+                }
+            }
+            running() {
+                super.init();
+                super.printCross();
+                this.printUnit();
+                this.printCalc();
+            }
+
+        }
+
+        class LogCopies extends AbstractLog {
+            constructor(id, logConstant) {
+                super(id);
+                this.logConstant = logConstant;
+            }
+            printUnit() {
+                super.printUnit();
+                for (let i = 1; i <= 100; i++) {
+                    this.pen.fillText(`${this.logConstant}`, this.gap - 0.5 * this.scaleFactor, this.canvasHeight-this.gap+16 -i * this.scaleFactor)
+                }
+                //승 text
+                this.pen.font = '10px sans-serif'
+                for (let i = 1; i <= this.canvasHeight; i++) {
+                    this.pen.fillText(`${i}`, this.gap - 0.35 * this.scaleFactor, this.canvasHeight-this.gap+9 - i * this.scaleFactor)
+                }
+            }
+            printCalc() {
+                for (let x = 0; x < this.canvasWidth; x += 0.001) {
+                    super.printDot(x, (2 ** x));
+                }
+            }
+            running() {
+                super.init();
+                super.printCross();
+                this.printUnit();
+                this.printCalc();
+            }
+        }
+
+        const main = (() => {
+            const logDefault = new LogDefault('logDefault');
+            const log2 = new LogCopies('log2', 2);
+            const log5 = new LogCopies('log5', 5);
+            logDefault.running();
+            log2.running();
+            log5.running();
+        })();
+    </script>
+</body>
+
+</html>
