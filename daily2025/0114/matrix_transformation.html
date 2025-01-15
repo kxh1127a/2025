@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <script>
+        class Transformation {
+            constructor(id) {
+                this.id = id;
+                this.canvas = document.getElementById('canvas');
+                this.pen = this.canvas.getContext('2d');
+                this.toX = 20;
+                this.toY = -20;
+            }
+            drawInit() {
+                for(let i=0; i<=500; i++) {
+                    this.pen.fillRect (i, 250, 1, 1);
+                    this.pen.fillRect (250, i, 1, 1);
+                }
+            }
+            drawPoint(x, y) {
+                this.pen.fillRect(250+ x, 250-y, 1, 1)
+            }
+            drawFirst(a, b) {
+                //y=ax+b
+                //a 기울기 b y절편
+                
+                for(let i=-250; i<=250; i++) {
+                    this.pen.fillStyle = 'black';
+                    this.drawPoint(i, a*i + b)
+                    this.drawTrans(i, a*i + b)
+                }
+            }
+            drawTrans(a, b) {
+                let matrixDefault = [
+                    [ 1, 0, this.toX ],
+                    [ 0, 1, this.toY ],
+                    [ 0, 0, 1 ]
+                ];
+        
+                let matrixPoint = [ [a], [b], [1] ];
+                let matrixResult = [];
+                console.log(matrixPoint[0][1])
+
+                for(let i=0; i<matrixDefault.length; i++) {
+                    for(let j=0; j<matrixPoint[0].length; j++) {
+                        let tempV = 0;
+                        for(let k=0; k<matrixDefault[0].length; k++) {
+                            tempV += matrixDefault[i][k] * matrixPoint[k][j]
+                        }
+                        matrixResult.push(tempV)
+                    }
+                }
+                this.pen.fillStyle = "green"
+                this.drawPoint(matrixResult[0], matrixResult[1])
+            }
+            running(){
+                this.drawInit();
+                this.drawFirst(3, 4);
+            }
+            
+
+
+        }
+
+        const main = (() => {
+            const transformation = new Transformation('transformation');
+            transformation.running();
+        })();
+    </script>
+</body>
+</html>
