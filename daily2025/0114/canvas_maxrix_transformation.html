@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -22,10 +23,10 @@
 
 <body>
     <p>
-        (<input id="x1" type="text" placeholder="x1" value="1">,
-        <input id="y1" type="text" placeholder="y1" value="1">)
-        (<input id="x2" type="text" placeholder="x2" value="2">,
-        <input id="y2" type="text" placeholder="y2" value="2">)
+        (<input id="x1" type="text" placeholder="x1" value="0">,
+        <input id="y1" type="text" placeholder="y1" value="0">)
+        (<input id="x2" type="text" placeholder="x2" value="1">,
+        <input id="y2" type="text" placeholder="y2" value="1">)
         <button id="drawBtn">사각형 그리기</button>
     </p>
     <br>
@@ -49,18 +50,18 @@
     </p>
     <br>
     <p>
-        <input id="toXvalue" type="text" class="inputText" placeholder="x축방향" value="1"><input id="toYvalue" class="inputText" placeholder="y축방향" type="text" value="1">
+        <input id="toXvalue" type="text" class="inputText" placeholder="x축방향"><input id="toYvalue" class="inputText" placeholder="y축방향" type="text">
         <button id="moveBtn">이동</button>
     </p>
     <p>
-        <input id="toXscale" type="text" class="inputText" placeholder="x축방향" value="1.5"><input id="toYscale" class="inputText" type="text" placeholder="y축방향" value="1.5">
+        <input id="toXscale" type="text" class="inputText" placeholder="x축방향"><input id="toYscale" class="inputText" type="text" placeholder="y축방향">
         <button id="scaleBtn">스케일</button>
     </p>
         <button id="xBtn">x축대칭</button>
         <button id="yBtn">y축대칭</button>
         <button id="xyBtn">xy축대칭</button>
     <p>        
-        <input id="degree" type="text" placeholder="각도" value="30">
+        <input id="degree" type="text" placeholder="각도">
         <button id="rotateBtn">회전</button>
         <button id="xSkew">X Skew</button>
         <button id="ySkew">Y Skew</button>
@@ -74,8 +75,8 @@
                 this.pen = document.getElementById('canvas').getContext('2d');
                 this.x1, this.y1, this.x2, this.y2 = 0;
                 this.toX, this.toY = 0;
-                this.sizeX, this.sizeY = 0;
-                this.sin, this.cos, this.tan1, this.tan2 = 0;
+                this.sizeX, this.sizeY = 1.5;
+                this.sin, this.cos, this.tan = 0;
                 this.lineX1, this.lineX2 = 0;
                 this.triangleX1, this.triangleX2, this.triangleX3 = 0;
                 this.triangleY1, this.triangleY2, this.triangleY3 = 0;
@@ -160,7 +161,7 @@
                         break;
                     case "xSkew":
                         defaultMatrix = [
-                            [1, this.tan2, 0],
+                            [1, this.tan, 0],
                             [0, 1, 0],
                             [0, 0, 1]
                         ]
@@ -168,7 +169,7 @@
                     case "ySkew":
                         defaultMatrix = [
                             [1, 0, 0],
-                            [this.tan1, 1, 0],
+                            [this.tan, 1, 0],
                             [0, 0, 1]
                         ]
                         break;
@@ -214,15 +215,8 @@
                     }
                 }
                 // console.log(resultArr)
-                switch(switcher) {
-                    case "size":
-                        // this.transDot(resultArr[0], resultArr[1], "trans")
-                        this.printDot(resultArr[0]-(x/this.sizeX), resultArr[1]-(y/this.sizeY))
-                        break;
-                    default:
-                        this.printDot(resultArr[0], resultArr[1])
-                        break;
-                }
+                console.log(resultArr[0]);
+                this.printDot(resultArr[0] - (this.sizeX-1)*x, resultArr[1]-this.sizeY*y)
             }
             event() {
                 const drawing = (switcher) => {
@@ -282,10 +276,10 @@
                             let y1 = Number(document.getElementById('y1').value);
                             let x2 = Number(document.getElementById('x2').value);
                             let y2 = Number(document.getElementById('y2').value);
-                            if (x1 > x2) { this.x1 = x1; this.x2 = x2; }
-                            else { this.x1 = x2; this.x2 = x1 }
-                            if (y1 > y2) { this.y1 = y1; this.y2 = y2; }
-                            else { this.y1 = y2; this.y2 = y1 }
+                            this.x1 = Math.max(x1,x2);
+                            this.x2 = Math.min(x1,x2);
+                            this.y1 = Math.max(y1,y2);
+                            this.y2 = Math.min(y1,y2);
                             this.draw();
                             break;
                         case "drawLineBtn":
@@ -329,11 +323,10 @@
                             drawingCircle("size");
                             break;
                         case "rotateBtn":
-                            const degree = Number(document.getElementById('degree').value);
+                            const degree = document.getElementById('degree').value;
                             this.sin = Math.sin(Math.PI * degree / 180);
                             this.cos = Math.cos(Math.PI * degree / 180);
-                            this.tan1 = Math.tan(Math.PI * degree / 180);
-                            this.tan2 = Math.tan(Math.PI * (90 - degree) / 180);
+                            this.tan = Math.tan(Math.PI * degree / 180);
                             drawing("rotate");
                             drawingLine(this.lineX1, this.lineY1, this.lineX2, this.lineY2, "rotate");
                             drawingTriangle("rotate");
@@ -358,22 +351,20 @@
                             drawingCircle("XY");
                             break;
                         case "xSkew":
-                            const degree1 = Number(document.getElementById('degree').value);
+                            const degree1 = document.getElementById('degree').value;
                             this.sin = Math.sin(Math.PI * degree1 / 180);
                             this.cos = Math.cos(Math.PI * degree1 / 180);
-                            this.tan1 = Math.tan(Math.PI * degree1 / 180);
-                            this.tan2 = Math.tan((Math.PI * degree1) / 180);
+                            this.tan = Math.tan(Math.PI * degree1 / 180);
                             drawing("xSkew");
                             drawingLine(this.lineX1, this.lineY1, this.lineX2, this.lineY2, "xSkew");
                             drawingTriangle("xSkew");
                             drawingCircle("xSkew");
                             break;
                         case "ySkew":
-                            const degree2 = Number(document.getElementById('degree').value);
+                            const degree2 = document.getElementById('degree').value;
                             this.sin = Math.sin(Math.PI * degree2 / 180);
                             this.cos = Math.cos(Math.PI * degree2 / 180);
-                            this.tan1 = Math.tan(Math.PI * degree2 / 180);
-                            this.tan2 = Math.tan(Math.PI * degree2 / 180);
+                            this.tan = Math.tan(Math.PI * degree2 / 180);
                             drawing("ySkew");
                             drawingLine(this.lineX1, this.lineY1, this.lineX2, this.lineY2, "ySkew");
                             drawingTriangle("ySkew");
