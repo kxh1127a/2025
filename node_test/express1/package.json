@@ -1,0 +1,14 @@
+{
+  "name": "express1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "supervisor index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "supervisor": "^0.12.0"
+  }
+}

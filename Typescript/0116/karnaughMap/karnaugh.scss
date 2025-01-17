@@ -1,0 +1,100 @@
+@mixin fontSet {
+    color: rgb(94, 122, 175);
+    font-weight: 700;
+    font-size: 25px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    margin-left: 126px;
+    margin-top: 100px;
+    color: rgb(83, 102, 119)
+}
+
+div {
+    // border: 1px solid black;
+}
+
+.mainBox {
+    margin-left: 100px;
+    margin-top: 50px;
+
+    .leftBox {
+        display: inline-block;
+        float: left;
+        // border: 1px solid red;
+        height: 200px;
+
+        p{
+            margin-top: 55px;
+        }
+        .yText {
+            margin-top: 15px;
+            @include fontSet;
+        }
+        
+    }
+
+    .rightBox {
+        display: inline-block;
+        // border: 1px solid red;
+
+        .xText {
+            @include fontSet;
+
+            span {
+                margin-left: 62px;
+                color: black;
+                font-size: 16px;      
+                font-weight: normal;      
+            }
+        }
+
+        .bigBox {
+            width: 200px;
+            height: 200px;
+            margin-top: 15px;
+            margin-left: 15px;
+
+            .upperBox {
+                width: 200px;
+                height: 100px;
+
+                div {
+                    display: inline-block;
+                    float: left;
+                    width: 100px;
+                    height: 100px;
+                    border: 1px solid rgb(94, 122, 175);
+                }
+            }
+
+            .lowerBox {
+                width: 200px;
+                height: 100px;
+
+                div {
+                    display: inline-block;
+                    float: left;
+                    width: 100px;
+                    height: 100px;
+                    border: 1px solid rgb(94, 122, 175);
+                }
+            }
+        }
+
+        .bigBox:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.checked {
+    background-color: rgb(94, 122, 175);
+    border: 1px solid white !important;
+}

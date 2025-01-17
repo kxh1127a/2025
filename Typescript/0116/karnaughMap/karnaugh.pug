@@ -1,0 +1,26 @@
+doctype html
+html(lang="ko")
+    head
+        meta(charset="utf-8")
+        title karnaugh map
+        link(rel="stylesheet" href="./karnaugh.css")
+        script(src="./karnaugh.js")
+    body
+        h1 Karnaugh-Map
+        section.mainBox
+            section.leftBox
+                p.yText y
+                p 0
+                p 1
+            section.rightBox
+                p.xText x
+                    span 0
+                    span 1 
+            
+                .bigBox
+                    .upperBox
+                        .box_0_0
+                        .box_0_1
+                    .lowerBox
+                        .box_1_0
+                        .box_1_1 
