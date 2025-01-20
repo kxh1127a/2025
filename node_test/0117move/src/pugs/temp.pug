@@ -1,0 +1,14 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        title #{title}
+    body
+        h1(style="color: green") hello jade~
+        ul
+            -for(let i=0; i<5; i++)
+                li coding #{i+1} 
+        div #{time}
+        form(method="post" action="/template")
+            input(type="text" name="select")
+            input(type="submit" value="제출")
