@@ -142,29 +142,29 @@
                 this.pen.fillRect(x, y, 1, 1)
             }
             printDot(x, y) {
-                this.pen.fillRect(this.canvasWidth/2 + x * this.scaleFactor, this.canvasHeight/2 - y * this.scaleFactor, 1, 1);
+                this.pen.fillRect(this.canvasWidth / 2 + x * this.scaleFactor, this.canvasHeight / 2 - y * this.scaleFactor, 1, 1);
             }
             printArr(x, y) {
-                this.pen.fillRect(this.canvasWidth/2 + x, this.canvasHeight/2 - y, 1, 1);
+                this.pen.fillRect(this.canvasWidth / 2 + x, this.canvasHeight / 2 - y, 1, 1);
             }
             printCross(x, y) {
                 console.log(this.canvasWidth);
                 this.pen.fillStyle = 'black';
                 for (let i = 0; i < 500; i += 0.005) {
-                    this.defaultDot(i, this.canvasHeight/2);
+                    this.defaultDot(i, this.canvasHeight / 2);
                 }
                 for (let i = 0; i < 500; i += 0.005) {
-                    this.defaultDot(this.canvasWidth/2, i);
+                    this.defaultDot(this.canvasWidth / 2, i);
                 }
             }
             printUnit() {
                 this.pen.fillStyle = 'black';
-                for (let i = -(this.canvasWidth/2); i < this.canvasWidth/2; i++) {
+                for (let i = -(this.canvasWidth / 2); i < this.canvasWidth / 2; i++) {
                     for (let j = -0.1; j < 0.11; j += 0.005) {
                         this.printDot(i, j);
                     }
                 }
-                for (let i = -(this.canvasHeight/2); i < this.canvasHeight/2; i++) {
+                for (let i = -(this.canvasHeight / 2); i < this.canvasHeight / 2; i++) {
                     for (let j = -0.1; j < 0.11; j += 0.005) {
                         this.printDot(j, i);
                     }
@@ -184,7 +184,7 @@
                 }
             }
             fillArr(arrA, arrB) {
-                for (let i = 0; i < arrA.length-1; i++) {
+                for (let i = 0; i < arrA.length - 1; i++) {
                     this.firstGraph(arrA[i], arrB[i], arrA[i + 1], arrB[i + 1])
                     this.defaultArr.push([arrA[i], arrB[i], 0])
                 }
@@ -217,7 +217,7 @@
                 }
                 // console.log(resultArr);
                 this.pen.fillStyle = 'red';
-                for (let i = 0; i < resultArr.length-1; i++) {
+                for (let i = 0; i < resultArr.length - 1; i++) {
                     console.log(resultArr[i][0]);
                     this.firstGraph(resultArr[i][0][0], resultArr[i][0][1], resultArr[i + 1][0][0], resultArr[i + 1][0][1])
                 }
@@ -230,14 +230,14 @@
                     resultArr.push(this.matrixMultiple([this.defaultArr[i]], yAxisSymmetry))
                 }
                 this.pen.fillStyle = 'blue';
-                for (let i = 0; i < resultArr.length-1; i++) {
+                for (let i = 0; i < resultArr.length - 1; i++) {
                     this.firstGraph(resultArr[i][0][0], resultArr[i][0][1], resultArr[i + 1][0][0], resultArr[i + 1][0][1])
                 }
             }
             xyAxisSymmetry() {
                 const resultArr = [];
                 const xyAxisSymmetry = [[-1, 0, 0], [0, -1, 0], [0, 0, 1]];
-                for (let i = 0; i < this.defaultArr.length-1; i++) {
+                for (let i = 0; i < this.defaultArr.length - 1; i++) {
                     this.matrixMultiple([this.defaultArr[i]], xyAxisSymmetry);
                     resultArr.push(this.matrixMultiple([this.defaultArr[i]], xyAxisSymmetry))
                 }
@@ -247,23 +247,23 @@
                 }
             }
             reDraw(arrA, arrB) {
-                this.pen.clearRect(0,0,500,500);
+                this.pen.clearRect(0, 0, 500, 500);
                 this.init();
                 this.fillArr(arrA, arrB);
-                if(this.isXon) { this.xAxisSymmetry(); }
-                if(this.isYon) { this.yAxisSymmetry(); }
-                if(this.isXYon) { this.xyAxisSymmetry(); }
+                if (this.isXon) { this.xAxisSymmetry(); }
+                if (this.isYon) { this.yAxisSymmetry(); }
+                if (this.isXYon) { this.xyAxisSymmetry(); }
             }
-            toBigger(arrA, arrB) {    
+            toBigger(arrA, arrB) {
                 this.scaleFactor += 5;
                 this.reDraw(arrA, arrB);
             }
             toSmaller(arrA, arrB) {
-                if(this.scaleFactor!=5) { this.scaleFactor -= 5; }
+                if (this.scaleFactor != 5) { this.scaleFactor -= 5; }
                 this.reDraw(arrA, arrB);
             }
             reset(arrA, arrB) {
-                this.pen.clearRect(0,0,500,500);
+                this.pen.clearRect(0, 0, 500, 500);
                 this.scaleFactor = 25;
                 this.init();
                 this.fillArr(arrA, arrB);
@@ -294,7 +294,7 @@
             //     this.reDraw(arrA, arrB);
             // }
             movement(arrA, arrB, getText) {
-                switch(getText) {
+                switch (getText) {
                     case "up":
                         this.canvasHeight += 40 * (this.scaleFactor / 20);
                         this.reDraw(arrA, arrB);
@@ -340,7 +340,7 @@
                             this.movement(arrA, arrB, "up");
                             break;
                         case "down":
-                            this.movement(arrA, arrB, "down");    
+                            this.movement(arrA, arrB, "down");
                             break;
                         case "left":
                             this.movement(arrA, arrB, "left");

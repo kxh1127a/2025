@@ -5,11 +5,11 @@ console.log(os.freemem());
 console.log(os.totalmem());
 
 
-setInterval(()=>{
+setInterval(() => {
     const newData = { freemem: os.freemem(), totalmem: os.totalmem() };
-    console.log( JSON.stringify(newData) );
-    
-    fs.writeFile('./memData.json', JSON.stringify(newData), (err)=>{
-        if(err) throw err;
+    console.log(JSON.stringify(newData));
+
+    fs.writeFile('./memData.json', JSON.stringify(newData), (err) => {
+        if (err) throw err;
     })
 }, 2000)

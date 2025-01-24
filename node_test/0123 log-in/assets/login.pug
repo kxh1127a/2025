@@ -1,0 +1,15 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Document
+    body 
+       h1 로그인페이지.
+       form(action="/login" method="post")
+            p ID 
+                input(type="text" name="loginID" placeholder="아이디 입력해주세요")
+            p PASSWORD 
+                input(type="text" name="loginPW" placeholder="비밀번호 입력해주세요")
+            p
+                input(type="submit" value="로그인하기")

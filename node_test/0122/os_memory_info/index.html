@@ -22,12 +22,12 @@
             }
             getData() {
                 const xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
+                xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         // console.log(this.responseText);
                         const { freemem, totalmem } = JSON.parse(this.responseText);
-                        this.freemem = Number((freemem/(1024**3)));
-                        this.totalmem = Number((totalmem/(1024**3)));
+                        this.freemem = Number((freemem / (1024 ** 3)));
+                        this.totalmem = Number((totalmem / (1024 ** 3)));
                         console.log(this.freemem, this.totalmem);
                         memData.drawCircle(this.freemem, this.totalmem);
                     }
@@ -37,25 +37,25 @@
             }
             initCanvas() {
                 this.pen = document.getElementById('canvas').getContext('2d');
-                for(let i=0; i<=360; i+=0.5) {
+                for (let i = 0; i <= 360; i += 0.5) {
                     let radian = (Math.PI * i) / 180;
                     let sin = Math.sin(radian) * 250;
                     let cos = Math.cos(radian) * 250;
-                    this.pen.fillRect(250+ cos, 250 - sin, 1, 1);
+                    this.pen.fillRect(250 + cos, 250 - sin, 1, 1);
                 }
             }
             drawCircle(a, b) {
-                const ratio = 360 * (b- a) / b;
+                const ratio = 360 * (b - a) / b;
                 // console.log(ratio);
                 const max = Math.floor(ratio + 90)
                 // console.log(max)
-                
-                for(let i=90; i<=max; i+=3) {
-                    for(let r=0; r<=250; r+=3) {
+
+                for (let i = 90; i <= max; i += 3) {
+                    for (let r = 0; r <= 250; r += 3) {
                         let radian = (Math.PI * i) / 180;
                         let sin = Math.sin(radian) * r;
                         let cos = Math.cos(radian) * r;
-                        this.pen.fillRect(250+cos, 250-sin, 1, 1);
+                        this.pen.fillRect(250 + cos, 250 - sin, 1, 1);
                     }
                 }
 
@@ -66,11 +66,11 @@
                 document.getElementById('outputArea').innerHTML = outputString;
 
 
-                
+
             }
             running() {
                 this.initCanvas();
-                setInterval(()=>{
+                setInterval(() => {
                     this.getData(), 2000
                 })
                 // this.getData();
@@ -79,8 +79,8 @@
         }
 
         // const main = (() => {
-            const memData = new MemData('memData');
-            memData.running();
+        const memData = new MemData('memData');
+        memData.running();
         // })();
 
 

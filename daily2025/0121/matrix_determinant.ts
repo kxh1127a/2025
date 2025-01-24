@@ -41,11 +41,11 @@ class Determinant {
 
 
 
-const defaultArr:any = [
-    [ 3, -1, -2 ],
-    [ -4, 2, 1 ],
-    [ 1, 4, -3 ]
+const defaultArr: any = [
+    [3, -1, -2],
+    [-4, 2, 1],
+    [1, 4, -3]
 ];
 
-const determinant:Determinant = new Determinant('determinant');
+const determinant: Determinant = new Determinant('determinant');
 determinant.running(defaultArr);

@@ -16,28 +16,11 @@ class Buffer {
     }
     linkNodes() {
         for (let i=0; i<this.storage.length; i++) {
-            //console.log(this.storage[i]);
-            //LinkedList { value: 'ZARD', prev: null, next: null }
             this.storage[i].next = this.storage[i+1];
             this.storage[i].prev = this.storage[i-1];
-
-            // console.log(this.storage[i].next);
-            // LinkedList { value: 'CDR', prev: null, next: null }
-            // LinkedList { value: 'LOVE', prev: null, next: null }
-            // undefined
-
-            // console.log(this.storage[i].prev);
-            // undefined
-            // LinkedList { value: 'ZARD', prev: undefined, next: null }
-            // LinkedList { value: 'CDR',
-            //              prev: LinkedList { value: 'ZARD', prev: undefined, next: null },
-            //              next: null
-            //              }
         }
-        // console.log(this.storage)
     }
 }
-
 
 const values = ["ZARD", "CDR", "LOVE"];
 const buffer = new Buffer('buffer');

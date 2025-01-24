@@ -1,0 +1,1 @@
+const testFile: string = 'readme';
