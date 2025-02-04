@@ -3,6 +3,8 @@ const app = express();
 const router = express.Router();
 const fs = require('fs');
 const bodyParser = require('body-parser');
+console.log(fs);
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 

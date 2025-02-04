@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">
+        <title>JOIN</title>
+    </head>
+    <body>
+        <form method="POST" action="createUser">
+            <label>
+                ID <input type="text" name="inId">
+            </label>
+            <label>
+                PW <input type="password" name="inPw" pattern="(?=.+\d)\w{4,10}">
+            </label>
+            <input type="submit" value="가입">
+        </form>
+    </body>
+</html>
