@@ -15,7 +15,7 @@ fs.readFile('./file1.txt', (err, data1)=>{
 
 
 
-iifs.readFile('./file1.txt')
+fs.readFile('./file1.txt')
     .then((data1)=>{
         console.log(data1);
         return fs.readFile('./file2.txt');
