@@ -1,0 +1,3 @@
+FROM ubuntu
+COPY test2.txt /text2.txt
+CMD cd / && ls -a
